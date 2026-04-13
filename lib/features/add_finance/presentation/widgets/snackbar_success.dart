@@ -1,0 +1,25 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+void showSuccessSnackbar(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height - 220,
+        left: 16,
+        right: 16,
+      ),
+      backgroundColor: Colors.green.shade300,
+      duration: Duration(seconds: 2),
+      content: Row(
+        children: [
+          Icon(CupertinoIcons.checkmark_circle, color: Colors.white),
+          SizedBox(width: 8),
+          Text(text),
+        ],
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    ),
+  );
+}
