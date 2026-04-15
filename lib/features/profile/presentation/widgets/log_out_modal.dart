@@ -21,7 +21,7 @@ class LogOutModal extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('images/log_out_image.png', width: 80, height: 80),
+            Image.asset('assets/images/log_out_image.png', width: 80, height: 80),
             SizedBox(height: 14),
             Text(
               'Are you sure you want to exit?',
