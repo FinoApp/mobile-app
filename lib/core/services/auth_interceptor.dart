@@ -29,9 +29,13 @@ class AuthInterceptor extends Interceptor {
       }
       try {
         final refreshToken = await storage.getRefreshToken();
+        final refreshResponse = await dio.post('/auth/refresh', data: {'refresh': refreshToken});
+        final newAccessToken = refreshResponse.data['access'];
+        await storage.safeTokens(newAccessToken, refreshToken!);
+
         final request = err.requestOptions;
 
-        request.headers['Authorization'] = 'Bearer $refreshToken';
+        request.headers['Authorization'] = 'Bearer $newAccessToken';
 
         final response = await dio.fetch(request);
         return handler.resolve(response);
