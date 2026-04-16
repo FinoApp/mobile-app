@@ -37,8 +37,6 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
 
   @override
   Widget build(BuildContext context) {
-    final selectDate = ref.watch(selectDateProvider);
-    final amountValue = ref.watch(amountProvider);
     final selectIndexCategory = ref.watch(selectedIndexCategoryProvider);
 
     return Form(
@@ -55,7 +53,11 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
             child: Stack(
               children: [
                 SafeArea(
-                  minimum: EdgeInsets.only(left: 16, right: 16, bottom: 116),
+                  minimum: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: 116,
+                  ),
                   child: ScrollConfiguration(
                     behavior: ScrollConfiguration.of(
                       context,
@@ -124,52 +126,7 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
                   left: 0,
                   bottom: 0,
                   right: 0,
-                  child: ButtonContainer(
-                    onTap: () async {
-                      if (globalKey.currentState!.validate()) {
-                        try {
-                          await ref
-                              .read(expenseRepositoryProvider)
-                              .postExpense(
-                                CreateExpenseModel(
-                                  amount: double.parse(amountValue),
-                                  title: titleController.text,
-                                  categoryId: selectIndexCategory!,
-                                  date: selectDate.toUtc().toIso8601String(),
-                                  note: noteController.text,
-                                ),
-                              );
-
-                          ref.read(amountProvider.notifier).state = '';
-                          ref.read(selectDateProvider.notifier).state =
-                              DateTime.now();
-                          ref
-                                  .read(selectedIndexCategoryProvider.notifier)
-                                  .state =
-                              null;
-                          noteController.clear();
-                          titleController.clear();
-                          amountController.clear();
-                          ref.invalidate(expenseListProvider);
-                          ref.invalidate(categoryListProvider);
-                          showSuccessSnackbar(
-                            context,
-                            'Expense added successfully',
-                          );
-                        } on DioException catch (e) {
-                          final message =
-                              e.response?.data?['message'] ??
-                              'Failed to add expense';
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(message.toString()),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      }
-                    },
-                  ),
+                  child: ButtonContainer(onTap: _onSubmit),
                 ),
               ],
             ),
@@ -177,5 +134,47 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _onSubmit() async {
+    final amountValue = ref.read(amountProvider);
+    final selectIndexCategory = ref.read(selectedIndexCategoryProvider);
+    final selectDate = ref.read(selectDateProvider);
+    if (globalKey.currentState!.validate()) {
+      try {
+        await ref
+            .read(expenseRepositoryProvider)
+            .postExpense(
+              CreateExpenseModel(
+                amount: double.parse(amountValue),
+                title: titleController.text,
+                categoryId: selectIndexCategory!,
+                date: selectDate.toUtc().toIso8601String(),
+                note: noteController.text,
+              ),
+            );
+        _resetForm();
+        ref.invalidate(expenseListProvider);
+        ref.invalidate(categoryListProvider);
+        showSuccessSnackbar(context, 'Expense added successfully');
+      } on DioException catch (e) {
+        final message = e.response?.data?['message'] ?? 'Failed to add expense';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message.toString()),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _resetForm() {
+    ref.read(amountProvider.notifier).state = '';
+    ref.read(selectDateProvider.notifier).state = DateTime.now();
+    ref.read(selectedIndexCategoryProvider.notifier).state = null;
+    noteController.clear();
+    titleController.clear();
+    amountController.clear();
   }
 }
