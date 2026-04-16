@@ -14,7 +14,7 @@ class ProgressPage extends StatelessWidget {
         ),
         toolbarHeight: 46,
       ),
-      body: Center(child: Text("Will be soon...")),
+      body: Center(child: const Text("Will be soon...")),
     );
   }
 }
