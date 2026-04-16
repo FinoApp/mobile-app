@@ -103,7 +103,7 @@ class _SplashPageState extends ConsumerState<SplashPage>
                   Opacity(
                     opacity: logoOpacity.value,
                     child: SvgPicture.asset(
-                      'images/main_icon.svg',
+                      'assets/images/main_icon.svg',
                       width: 120,
                       colorFilter: ColorFilter.mode(
                         Colors.white70,

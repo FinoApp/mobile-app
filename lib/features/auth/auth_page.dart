@@ -45,7 +45,7 @@ class AuthPage extends StatelessWidget {
                 ),
                 child: Image.asset(
                   width: 200,
-                  isLight ? '/images/auth_image.png' : '/images/auth_dark.png',
+                  isLight ? 'assets/images/auth_image.png' : 'assets/images/auth_dark.png',
                 ),
               ),
               SizedBox(height: 50),
@@ -89,16 +89,10 @@ class AuthPage extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 14),
                         decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              offset: Offset(2, 2),
-                              blurRadius: 16,
-                            ),
-                          ],
+
                           color: Theme.of(
                             context,
-                          ).colorScheme.secondary.withGreen(80),
+                          ).colorScheme.secondary.withGreen(50),
                           // gradient: LinearGradient(
                           //   begin: Alignment.topCenter,
                           //   end: Alignment.bottomCenter,

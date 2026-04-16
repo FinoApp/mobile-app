@@ -9,13 +9,13 @@ class LoginQauth extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         GestureDetector(
-          child: Image.asset('images/google.png', width: 70, height: 70),
+          child: Image.asset('assets/images/google.png', width: 70, height: 70),
         ),
         GestureDetector(
-          child: Image.asset('images/facebook.png', width: 70, height: 70),
+          child: Image.asset('assets/images/facebook.png', width: 70, height: 70),
         ),
         GestureDetector(
-          child: Image.asset('images/x.png', width: 70, height: 70),
+          child: Image.asset('assets/images/x.png', width: 70, height: 70),
         ),
       ],
     );

@@ -39,7 +39,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
-    final extenseList = ref.watch(expenseListProvider);
+    final expenseList = ref.watch(expenseListProvider);
     final currency = ref.watch(currencyProvider);
 
     return Scaffold(
@@ -53,7 +53,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
         child: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
 
-          child: extenseList.when(
+          child: expenseList.when(
             data: (data) => data.isEmpty
                 ? SingleChildScrollView(
                     child: ConstrainedBox(
@@ -68,15 +68,15 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                           children: [
                             Image.asset(
                               isLight
-                                  ? '/images/empty_list_light.png'
-                                  : '/images/empty_list_dark.png',
+                                  ? 'assets/images/empty_list_light.png'
+                                  : 'assets/images/empty_list_dark.png',
                               width: 250,
                               height: 230,
                               fit: BoxFit.contain,
                             ),
                             SizedBox(height: 16),
                             Text(
-                              'No Expenes Yet',
+                              'No Expenses Yet',
                               style: Theme.of(context).textTheme.bodyLarge!
                                   .copyWith(
                                     color: Theme.of(
