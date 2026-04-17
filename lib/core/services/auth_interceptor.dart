@@ -1,11 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:financial_ccounting/core/providers/is_login_provider.dart';
 import 'package:financial_ccounting/core/services/token_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthInterceptor extends Interceptor {
   final Dio dio;
   final TokenStorage storage;
-
-  AuthInterceptor({required this.dio, required this.storage});
+  final Ref ref;
+  bool _isRefreshing = false;
+  AuthInterceptor({
+    required this.dio,
+    required this.storage,
+    required this.ref,
+  });
 
   @override
   void onRequest(
@@ -27,9 +34,18 @@ class AuthInterceptor extends Interceptor {
           err.requestOptions.path.contains('/auth/refresh')) {
         return handler.next(err);
       }
+
+      if (_isRefreshing) {
+        return handler.next(err);
+      }
+
+      _isRefreshing = true;
       try {
         final refreshToken = await storage.getRefreshToken();
-        final refreshResponse = await dio.post('/auth/refresh', data: {'refresh': refreshToken});
+        final refreshResponse = await dio.post(
+          '/auth/refresh',
+          data: {'refresh': refreshToken},
+        );
         final newAccessToken = refreshResponse.data['access'];
         await storage.safeTokens(newAccessToken, refreshToken!);
 
@@ -41,6 +57,10 @@ class AuthInterceptor extends Interceptor {
         return handler.resolve(response);
       } catch (e) {
         await storage.clear();
+        ref.read(isLoginProvider.notifier).state = false;
+        return handler.next(err);
+      } finally {
+        _isRefreshing = false;
       }
     }
     handler.next(err);
