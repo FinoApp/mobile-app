@@ -17,6 +17,8 @@ import 'package:financial_ccounting/features/splash_screen/splash_animation.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/profile/presentation/page/support_page.dart';
+
 final router = Provider<GoRouter>((ref) {
   final user = ref.watch(isLoginProvider);
 
@@ -104,6 +106,11 @@ final router = Provider<GoRouter>((ref) {
                 path: 'language',
                 pageBuilder: (context, state) =>
                     NoTransitionPage(child: LanguagePage()),
+              ),
+              GoRoute(
+                path: 'support',
+                pageBuilder: (context, state) =>
+                    NoTransitionPage(child: SupportPage()),
               ),
             ],
           ),
