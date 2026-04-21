@@ -57,8 +57,9 @@ class SettingsMenu extends StatelessWidget {
           SettingsItem(
             icon: CupertinoIcons.question_circle,
             text: 'Help',
-            onPressed: () {},
-            isActive: false,
+            onPressed: () {
+              context.push("/profile/support");
+            },
           ),
         ],
       ),

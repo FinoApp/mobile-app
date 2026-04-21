@@ -52,12 +52,13 @@ class CurrencyPage extends ConsumerWidget {
               children: [
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListView.separated(
+                      padding: EdgeInsets.zero,
                       separatorBuilder: (context, index) =>
                           CastomDivider(left: 16, right: 16),
                       itemCount: CurrencyEnum.values.length,
@@ -68,15 +69,23 @@ class CurrencyPage extends ConsumerWidget {
                           onTap: () =>
                               ref.read(currencyProvider.notifier).state =
                                   currency,
-                          trailing: isSelected ? Icon(Icons.check) : null,
+                          trailing: isSelected
+                              ? Icon(
+                                  Icons.check,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              : null,
                           leading: Text(
                             currency.symbol,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 24,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
-                          title: Text(currency.title),
+                          title: Text(
+                            currency.title,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         );
                       },
                     ),

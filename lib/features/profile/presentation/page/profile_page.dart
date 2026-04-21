@@ -27,6 +27,15 @@ class ProfilePage extends StatelessWidget {
                 SettingsMenu(),
                 SizedBox(height: 12),
                 LogOutButton(),
+                SizedBox(height: 16),
+                Center(
+                  child: Text(
+                    'Version 1.0.0',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 20),
               ],
             ),

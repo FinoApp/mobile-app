@@ -51,12 +51,13 @@ class LanguagePage extends ConsumerWidget {
               children: [
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListView.separated(
+                      padding: EdgeInsets.zero,
                       separatorBuilder: (context, index) =>
                           CastomDivider(left: 16, right: 16),
                       itemCount: LanguageEnum.values.length,
@@ -67,9 +68,20 @@ class LanguagePage extends ConsumerWidget {
                           onTap: () =>
                               ref.read(languageProvider.notifier).state =
                                   language,
-                          trailing: isSelected ? Icon(Icons.check) : null,
-                          leading: Text(language.flag),
-                          title: Text(language.title),
+                          trailing: isSelected
+                              ? Icon(
+                                  Icons.check,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              : null,
+                          leading: Text(
+                            language.flag,
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          title: Text(
+                            language.title,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         );
                       },
                     ),
