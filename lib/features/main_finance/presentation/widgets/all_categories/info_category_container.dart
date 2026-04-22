@@ -5,31 +5,18 @@ class InfoCategoryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Text(
-                'Icon',
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-              ),
-              SizedBox(width: 20),
-              Text(
-                'Name',
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-              ),
-            ],
+          Icon(
+            Icons.swipe_left_rounded,
+            size: 16,
+            color: Theme.of(context).colorScheme.onSecondary,
           ),
+          SizedBox(width: 6),
           Text(
-            'Total',
+            'Swipe left to edit or delete',
             style: Theme.of(context).textTheme.labelSmall!.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
             ),

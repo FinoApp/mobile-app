@@ -28,16 +28,54 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
 
   @override
   void dispose() {
-    super.dispose();
     titleController.dispose();
     emojiController.dispose();
+    super.dispose();
   }
 
   @override
   void initState() {
+    super.initState();
     titleController = TextEditingController(text: widget.category.title);
     emojiController = TextEditingController(text: widget.category.icon);
-    super.initState();
+  }
+
+  InputDecoration _inputDecoration(BuildContext context, String hint) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    return InputDecoration(
+      fillColor: Theme.of(context).colorScheme.onPrimary,
+      filled: true,
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          width: 1.5,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          width: 1,
+          color: Theme.of(context).colorScheme.error,
+        ),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          width: 1.5,
+          color: Theme.of(context).colorScheme.error,
+        ),
+      ),
+      hintText: hint,
+      hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+        color: isLight ? Colors.black38 : Colors.white38,
+      ),
+    );
   }
 
   @override
@@ -45,91 +83,90 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Dialog(
-      child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(14)),
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Edit category', style: Theme.of(context).textTheme.bodyLarge),
-            SizedBox(height: 14),
+            // Header
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withAlpha(25),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.edit_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 22,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Text(
+                  'Edit Category',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+
+            // Form
             Form(
               key: globalKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    'Title',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  ),
+                  SizedBox(height: 6),
                   TextFormField(
                     validator: (value) => fieldsValidator(value),
                     controller: titleController,
                     maxLength: 30,
-                    decoration: InputDecoration(
-                      fillColor: Theme.of(context).colorScheme.onPrimary,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      hint: Text(
-                        'Enter new title',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isLight ? Colors.black38 : Colors.white38,
-                        ),
-                      ),
+                    decoration: _inputDecoration(context, 'Enter title'),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Icon',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 6),
                   TextFormField(
                     validator: (value) => fieldsValidator(value),
                     maxLength: 2,
                     controller: emojiController,
-                    decoration: InputDecoration(
-                      fillColor: Theme.of(context).colorScheme.onPrimary,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      hint: Text(
-                        'Enter initials or emoji',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isLight ? Colors.black38 : Colors.white38,
-                        ),
-                      ),
-                    ),
+                    decoration: _inputDecoration(context, 'Enter emoji'),
                   ),
-                  SizedBox(height: 18),
+                  SizedBox(height: 16),
+
+                  // Buttons
                   Row(
                     children: [
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            context.pop();
-                          },
+                          onTap: () => context.pop(),
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(vertical: 14),
                             decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withAlpha(20),
-                                  blurRadius: 8,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: Colors.black12),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: isLight
+                                    ? Colors.black12
+                                    : Colors.white24,
+                              ),
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                             child: Center(
@@ -137,6 +174,7 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                                 'Cancel',
                                 style: Theme.of(context).textTheme.bodyMedium!
                                     .copyWith(
+                                      fontWeight: FontWeight.w500,
                                       color: isLight
                                           ? Colors.black54
                                           : Colors.white54,
@@ -146,7 +184,7 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 4),
+                      SizedBox(width: 12),
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
@@ -161,45 +199,42 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                                         icon: emojiController.text,
                                       ),
                                     );
-                                showSuccessSnackbar(
-                                  context,
-                                  'Category edited successfully',
-                                );
                                 ref.invalidate(categoryListProvider);
-                                context.pop();
+                                if (context.mounted) {
+                                  showSuccessSnackbar(
+                                    context,
+                                    'Category updated',
+                                  );
+                                  context.pop();
+                                }
                               } catch (e) {
-                                print(e);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Failed to update category',
+                                      ),
+                                    ),
+                                  );
+                                }
                               }
                             }
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(vertical: 14),
                             decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withAlpha(40),
-                                  blurRadius: 8,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
+                              borderRadius: BorderRadius.circular(12),
                               color: Theme.of(
                                 context,
-                              ).colorScheme.primary.withAlpha(150),
-
-                              borderRadius: BorderRadius.circular(14),
+                              ).colorScheme.primary.withAlpha(220),
                             ),
                             child: Center(
                               child: Text(
-                                'Edit',
+                                'Save',
                                 style: Theme.of(context).textTheme.bodyMedium!
                                     .copyWith(
-                                      color: isLight
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.onPrimary
-                                          : Theme.of(
-                                              context,
-                                            ).colorScheme.onSurface,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
                                     ),
                               ),
                             ),

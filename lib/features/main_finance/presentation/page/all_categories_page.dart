@@ -1,5 +1,4 @@
 import 'package:financial_ccounting/core/models/category_model/category_model.dart';
-import 'package:financial_ccounting/core/widgets/divider.dart';
 import 'package:financial_ccounting/features/add_finance/utils/fields_validator.dart';
 import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/providers/select_color_provider.dart';
@@ -28,10 +27,23 @@ class AllCategoriesPage extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
-              child: Icon(Icons.add),
               onTap: () => showDialog(
                 context: context,
                 builder: (context) => ModalForAddCategory(),
+              ),
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSecondary.withAlpha(20),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  Icons.add_rounded,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 22,
+                ),
               ),
             ),
           ),
@@ -50,8 +62,7 @@ class AllCategoriesPage extends ConsumerWidget {
         child: Column(
           children: [
             InfoCategoryContainer(),
-            CastomDivider(left: 0, right: 0),
-            SizedBox(height: 8),
+            SizedBox(height: 4),
             categoryList.when(
               data: (data) => Expanded(
                 child: ListView.builder(
@@ -62,10 +73,10 @@ class AllCategoriesPage extends ConsumerWidget {
                       children: [
                         Slidable(
                           endActionPane: ActionPane(
-                            extentRatio: 0.4,
-                            motion: DrawerMotion(),
+                            extentRatio: 0.35,
+                            motion: BehindMotion(),
                             children: [
-                              SlidableAction(
+                              CustomSlidableAction(
                                 onPressed: (context) {
                                   showDialog(
                                     context: context,
@@ -75,26 +86,50 @@ class AllCategoriesPage extends ConsumerWidget {
                                     ),
                                   );
                                 },
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                icon: Icons.edit,
-                                label: 'Edit',
+                                backgroundColor: Colors.transparent,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 8),
+                                  padding: EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    Icons.edit_outlined,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    size: 22,
+                                  ),
+                                ),
                               ),
-                              SlidableAction(
+                              CustomSlidableAction(
                                 onPressed: (context) async {
                                   await ref
                                       .read(categoryRepositoryProvider)
                                       .deleteCategory(category.id);
                                   ref.invalidate(categoryListProvider);
                                 },
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                                label: 'Delete',
+                                backgroundColor: Colors.transparent,
+                                child: Container(
+                                  padding: EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.error.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    Icons.delete_outline_rounded,
+                                    color: Theme.of(context).colorScheme.error,
+                                    size: 22,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-
                           child: CategoryCard(
                             currency: currency,
                             summary: category.total ?? 0.0,
@@ -136,171 +171,285 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
 
   @override
   void dispose() {
-    super.dispose();
     titleController.dispose();
     iconController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
-
     final selectColor = ref.watch(selectedColorProvider);
 
     return Dialog(
-      child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(14)),
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Add new category',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            SizedBox(height: 14),
-            Form(
-              key: globalKey,
-              child: Column(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.85,
+        ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              Row(
                 children: [
-                  TextFormField(
-                    validator: (value) => fieldsValidator(value),
-                    controller: titleController,
-                    maxLength: 30,
-                    decoration: InputDecoration(
-                      fillColor: Theme.of(context).colorScheme.onPrimary,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      hint: Text(
-                        'Enter title',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isLight ? Colors.black38 : Colors.white38,
-                        ),
-                      ),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withAlpha(25),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.add_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 22,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  TextFormField(
-                    validator: (value) => fieldsValidator(value),
-                    maxLength: 2,
-                    controller: iconController,
-                    decoration: InputDecoration(
-                      fillColor: Theme.of(context).colorScheme.onPrimary,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      hint: Text(
-                        'Enter initials or emoji',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: isLight ? Colors.black38 : Colors.white38,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 8),
-
-                  SingleChildScrollView(
-                    child: SizedBox(
-                      width: 230,
-                      height: 175,
-                      child: Consumer(
-                        builder: (context, ref, child) {
-                          return BlockPicker(
-                            pickerColor: Color(
-                              int.parse(
-                                'FF${selectColor.replaceFirst('#', '')}',
-                                radix: 16,
-                              ),
-                            ),
-                            onColorChanged: (color) {
-                              final hex =
-                                  '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
-                              ref.read(selectedColorProvider.notifier).state =
-                                  hex;
-
-                              // hex = ref.read(selectedColorProvider);
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 18),
-                  GestureDetector(
-                    onTap: () async {
-                      if (globalKey.currentState!.validate()) {
-                        try {
-                          await ref
-                              .read(categoryRepositoryProvider)
-                              .createCategory(
-                                CategoryRequest(
-                                  title: titleController.text,
-                                  color: selectColor,
-                                  icon: iconController.text,
-                                ),
-                              );
-                          ref.invalidate(categoryListProvider);
-                          context.pop();
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Failed to update expense')),
-                          );
-                        }
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(40),
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.primary.withAlpha(150),
-
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Add',
-                          style: Theme.of(context).textTheme.bodyMedium!
-                              .copyWith(
-                                color: isLight
-                                    ? Theme.of(context).colorScheme.onPrimary
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
-                        ),
-                      ),
+                  SizedBox(width: 12),
+                  Text(
+                    'New Category',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+
+              Form(
+                key: globalKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Title',
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    TextFormField(
+                      validator: (value) => fieldsValidator(value),
+                      controller: titleController,
+                      maxLength: 30,
+                      decoration: _inputDecoration(context, 'Enter title'),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Icon',
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    TextFormField(
+                      validator: (value) => fieldsValidator(value),
+                      maxLength: 2,
+                      controller: iconController,
+                      decoration: _inputDecoration(context, 'Enter emoji'),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Color',
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      height: 140,
+                      child: BlockPicker(
+                        pickerColor: Color(
+                          int.parse(
+                            'FF${selectColor.replaceFirst('#', '')}',
+                            radix: 16,
+                          ),
+                        ),
+                        layoutBuilder: (context, colors, child) {
+                          return GridView.count(
+                            crossAxisCount: 6,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+
+                            children: colors
+                                .map((color) => child(color))
+                                .toList(),
+                          );
+                        },
+                        itemBuilder: (color, isCurrentColor, changeColor) {
+                          return GestureDetector(
+                            onTap: changeColor,
+                            child: AnimatedContainer(
+                              duration: Duration(milliseconds: 150),
+                              padding: EdgeInsets.all(isCurrentColor ? 2 : 0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: isCurrentColor
+                                    ? Border.all(color: color, width: 2)
+                                    : null,
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: color,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: isCurrentColor
+                                    ? Icon(
+                                        Icons.check_rounded,
+                                        color: Colors.white,
+                                        size: 16,
+                                      )
+                                    : null,
+                              ),
+                            ),
+                          );
+                        },
+                        onColorChanged: (color) {
+                          final hex =
+                              '#${color.toARGB32().toRadixString(16).substring(2).toUpperCase()}';
+                          ref.read(selectedColorProvider.notifier).state = hex;
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 20),
+
+                    // Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => context.pop(),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 14),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: isLight
+                                      ? Colors.black12
+                                      : Colors.white24,
+                                ),
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Cancel',
+                                  style: Theme.of(context).textTheme.bodyMedium!
+                                      .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: isLight
+                                            ? Colors.black54
+                                            : Colors.white54,
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () async {
+                              if (globalKey.currentState!.validate()) {
+                                try {
+                                  await ref
+                                      .read(categoryRepositoryProvider)
+                                      .createCategory(
+                                        CategoryRequest(
+                                          title: titleController.text,
+                                          color: selectColor,
+                                          icon: iconController.text,
+                                        ),
+                                      );
+                                  ref.invalidate(categoryListProvider);
+                                  if (context.mounted) {
+                                    context.pop();
+                                  }
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Failed to create category',
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 14),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withAlpha(220),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Create',
+                                  style: Theme.of(context).textTheme.bodyMedium!
+                                      .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(BuildContext context, String hint) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    return InputDecoration(
+      fillColor: Theme.of(context).colorScheme.onPrimary,
+      filled: true,
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          width: 1.5,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          width: 1,
+          color: Theme.of(context).colorScheme.error,
+        ),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          width: 1.5,
+          color: Theme.of(context).colorScheme.error,
+        ),
+      ),
+      hintText: hint,
+      hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+        color: isLight ? Colors.black38 : Colors.white38,
       ),
     );
   }

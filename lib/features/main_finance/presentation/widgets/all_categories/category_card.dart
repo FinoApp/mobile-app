@@ -9,6 +9,7 @@ class CategoryCard extends StatelessWidget {
     required this.color,
     required this.currency,
   });
+
   final String icon;
   final double summary;
   final String category;
@@ -17,39 +18,55 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.only(left: 20, top: 12, bottom: 12, right: 0),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+    final categoryColor = Color(
+      int.parse('FF${color.replaceFirst('#', '')}', radix: 16),
+    );
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onPrimary,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: categoryColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(child: Text(icon, style: TextStyle(fontSize: 20))),
+          ),
+          SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Color(
-                    int.parse('FF${color.replaceFirst('#', '')}', radix: 16),
-                  ),
-                  child: Text(icon),
+                Text(
+                  category,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500),
                 ),
-                SizedBox(width: 10),
-                Text(category),
+                SizedBox(height: 2),
+                Text(
+                  '${summary.toStringAsFixed(2)} $currency',
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ),
               ],
             ),
-            Row(
-              children: [
-                Text('${summary.toString()} $currency'),
-                SizedBox(width: 14),
-                Icon(Icons.arrow_back_ios, color: Colors.black12),
-              ],
-            ),
-          ],
-        ),
+          ),
+          Icon(
+            Icons.chevron_left_rounded,
+            color: Theme.of(context).colorScheme.onSecondary,
+            size: 24,
+          ),
+        ],
       ),
     );
   }
