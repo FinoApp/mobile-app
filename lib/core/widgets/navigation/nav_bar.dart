@@ -56,13 +56,13 @@ class NavBar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     NavItem(
-                      icon: CupertinoIcons.home,
+                      icon: Icons.grid_view_rounded,
                       text: 'Spending',
                       selected: currentIndex == 0,
                       onTap: () => context.go(_tabs[0]),
                     ),
                     NavItem(
-                      icon: CupertinoIcons.rosette,
+                      icon: Icons.insights_outlined,
                       text: 'Progress',
                       selected: currentIndex == 1,
                       onTap: () => context.go(_tabs[1]),
@@ -78,13 +78,13 @@ class NavBar extends StatelessWidget {
 
                   children: [
                     NavItem(
-                      icon: CupertinoIcons.clock,
+                      icon: Icons.receipt_long_outlined,
                       text: 'History',
                       selected: currentIndex == 3,
                       onTap: () => context.go(_tabs[3]),
                     ),
                     NavItem(
-                      icon: CupertinoIcons.person_2,
+                      icon: Icons.person_outline_rounded,
                       text: 'Profile',
                       selected: currentIndex == 4,
                       onTap: () => context.go(_tabs[4]),

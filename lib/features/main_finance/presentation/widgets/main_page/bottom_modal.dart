@@ -37,7 +37,7 @@ void bottomModal({
             child: Container(
               decoration: BoxDecoration(
                 color: isLight
-                    ? Colors.white.withValues(alpha: 0.85)
+                    ? Colors.white.withValues(alpha: 0.95)
                     : Colors.black12.withValues(alpha: 0.20),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
@@ -203,6 +203,47 @@ class BottoModalButton extends ConsumerWidget {
         children: [
           Expanded(
             child: GestureDetector(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: isLight
+                      ? Colors.black.withValues(alpha: 0.05)
+                      : Colors.white.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      CupertinoIcons.delete,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      'Delete',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              onTap: () async {
+                try {
+                  await ref.read(expenseRepositoryProvider).deleteExpense(id);
+                  ref.invalidate(expenseListProvider);
+                  context.pop();
+                } on DioException catch (e) {
+                  print(e);
+                }
+              },
+            ),
+          ),
+          SizedBox(width: 6),
+          Expanded(
+            child: GestureDetector(
               onTap: () =>
                   showDialog(
                     context: context,
@@ -240,47 +281,6 @@ class BottoModalButton extends ConsumerWidget {
                   ],
                 ),
               ),
-            ),
-          ),
-          SizedBox(width: 6),
-          Expanded(
-            child: GestureDetector(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                  color: isLight
-                      ? Colors.black.withValues(alpha: 0.05)
-                      : Colors.white.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      CupertinoIcons.delete,
-                      size: 18,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    SizedBox(width: 6),
-                    Text(
-                      'Delete',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.error,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () async {
-                try {
-                  await ref.read(expenseRepositoryProvider).deleteExpense(id);
-                  ref.invalidate(expenseListProvider);
-                  context.pop();
-                } on DioException catch (e) {
-                  print(e);
-                }
-              },
             ),
           ),
         ],

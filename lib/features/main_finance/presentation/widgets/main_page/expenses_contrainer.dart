@@ -55,6 +55,7 @@ class ExpensesContrainer extends StatelessWidget {
                     category.toString(),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight(400),
                     ),
                   ),
                 ],
