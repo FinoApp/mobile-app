@@ -14,50 +14,72 @@ class LogOutModal extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Dialog(
-      child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(14)),
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/images/log_out_image.png', width: 80, height: 80),
-            SizedBox(height: 14),
-            Text(
-              'Are you sure you want to exit?',
-              style: Theme.of(context).textTheme.bodyLarge,
+            // Header
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.error.withAlpha(25),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.logout_rounded,
+                    color: Theme.of(context).colorScheme.error,
+                    size: 22,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Text(
+                  'Log Out',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 16),
+
+            // Message
+            Text(
+              'Are you sure you want to log out of your account?',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            ),
+            SizedBox(height: 20),
+
+            // Buttons
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  flex: 2,
                   child: GestureDetector(
                     onTap: () => context.pop(),
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 14),
                       decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(20),
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: Colors.black12),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isLight ? Colors.black12 : Colors.white24,
+                        ),
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       child: Center(
                         child: Text(
                           'Cancel',
-                          style: Theme.of(context).textTheme.bodyMedium!
-                              .copyWith(
-                                color: isLight
-                                    ? Colors.black54
-                                    : Colors.white54,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: isLight ? Colors.black54 : Colors.white54,
+                          ),
                         ),
                       ),
                     ),
@@ -65,7 +87,6 @@ class LogOutModal extends ConsumerWidget {
                 ),
                 SizedBox(width: 12),
                 Expanded(
-                  flex: 2,
                   child: GestureDetector(
                     onTap: () async {
                       await ref.read(authRepositoryProvider).logout();
@@ -76,27 +97,18 @@ class LogOutModal extends ConsumerWidget {
                       ref.read(isLoginProvider.notifier).state = false;
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 14),
                       decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(40),
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
+                        borderRadius: BorderRadius.circular(12),
                         color: Theme.of(context).colorScheme.error,
-                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Center(
                         child: Text(
                           'Log Out',
-                          style: Theme.of(context).textTheme.bodyMedium!
-                              .copyWith(
-                                color: isLight
-                                    ? Theme.of(context).colorScheme.onPrimary
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
