@@ -53,7 +53,8 @@ class ExpenseColumn extends ConsumerWidget {
               );
       },
       loading: () => Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(child: Text(error.toString())),
+      error: (error, _) =>
+          Center(child: Text("Oops, connection error, please log in again")),
     );
   }
 }
