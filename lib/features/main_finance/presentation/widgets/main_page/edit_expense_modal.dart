@@ -53,157 +53,196 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
   @override
   Widget build(BuildContext context) {
     final selectIndexCategory = ref.watch(selectedIndexCategoryProvider);
-
     final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Dialog(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(14)),
-          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
-          child: Form(
-            key: globalKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TitleField(
-                  titleController: titleController,
-                  validator: (value) => fieldsValidator(value),
+        padding: EdgeInsets.all(20),
+        child: Form(
+          key: globalKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary.withAlpha(25),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.edit_outlined,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 22,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'Edit Expense',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+
+              // Title field
+              Text(
+                'Title',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
-                SizedBox(height: 8),
-                Amount(
-                  validator: (value) => fieldsValidator(value),
-                  controller: amountController,
+              ),
+              SizedBox(height: 6),
+              TitleField(
+                titleController: titleController,
+                validator: (value) => fieldsValidator(value),
+              ),
+              SizedBox(height: 12),
+
+              // Amount field
+              Text(
+                'Amount',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
-                SizedBox(height: 8),
-                Category(radius: 28),
-                SizedBox(height: 18),
-                Text(
-                  DateFormat(
-                    'dd MMM yyyy',
-                  ).format(DateTime.parse(widget.expense.date)),
-                  style: TextStyle(
+              ),
+              SizedBox(height: 6),
+              Amount(
+                validator: (value) => fieldsValidator(value),
+                controller: amountController,
+              ),
+              SizedBox(height: 12),
+
+              // Category
+              Text(
+                'Category',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
+              ),
+              SizedBox(height: 8),
+              Category(radius: 28),
+              SizedBox(height: 16),
+
+              // Date
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 16,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
-                ),
-                SizedBox(height: 18),
-                Note(noteController: noteController),
+                  SizedBox(width: 8),
+                  Text(
+                    DateFormat('dd MMM yyyy').format(
+                      DateTime.parse(widget.expense.date),
+                    ),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: GestureDetector(
-                        onTap: () {
-                          context.pop();
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withAlpha(20),
-                                blurRadius: 8,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: Colors.black12),
-                            color: Theme.of(context).colorScheme.onPrimary,
+              // Note field
+              Text(
+                'Note',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
+              ),
+              SizedBox(height: 6),
+              Note(noteController: noteController),
+              SizedBox(height: 20),
+
+              // Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => context.pop(),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isLight ? Colors.black12 : Colors.white24,
                           ),
-                          child: Center(
-                            child: Text(
-                              'Cancel',
-                              style: Theme.of(context).textTheme.bodyMedium!
-                                  .copyWith(
-                                    color: isLight
-                                        ? Colors.black54
-                                        : Colors.white54,
-                                  ),
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Cancel',
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: isLight ? Colors.black54 : Colors.white54,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      flex: 2,
-                      child: GestureDetector(
-                        onTap: () async {
-                          if (globalKey.currentState!.validate()) {
-                            try {
-                              await ref
-                                  .read(expenseRepositoryProvider)
-                                  .editExpense(
-                                    widget.expense.id,
-                                    UpdateExpenseModel(
-                                      amount: double.parse(
-                                        amountController.text,
-                                      ),
-                                      title: titleController.text,
-                                      categoryId: selectIndexCategory,
-                                      note: noteController.text,
-                                    ),
-                                  );
-                              showSuccessSnackbar(
-                                context,
-                                'Expense updated successfully',
-                              );
-
-                              ref.invalidate(expenseListProvider);
-
-                              if (context.mounted) {
-                                context.pop();
-                                context.pop();
-                              }
-                            } catch (e) {
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (globalKey.currentState!.validate()) {
+                          try {
+                            await ref
+                                .read(expenseRepositoryProvider)
+                                .editExpense(
+                                  widget.expense.id,
+                                  UpdateExpenseModel(
+                                    amount: double.parse(amountController.text),
+                                    title: titleController.text,
+                                    categoryId: selectIndexCategory,
+                                    note: noteController.text,
+                                  ),
+                                );
+                            ref.invalidate(expenseListProvider);
+                            if (context.mounted) {
+                              showSuccessSnackbar(context, 'Expense updated');
+                              context.pop();
+                              context.pop();
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Failed to update expense'),
-                                ),
+                                SnackBar(content: Text('Failed to update expense')),
                               );
                             }
                           }
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withAlpha(40),
-                                blurRadius: 8,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withAlpha(150),
-
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(context).textTheme.bodyMedium!
-                                  .copyWith(
-                                    color: isLight
-                                        ? Theme.of(
-                                            context,
-                                          ).colorScheme.onPrimary
-                                        : Theme.of(
-                                            context,
-                                          ).colorScheme.onSurface,
-                                  ),
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Save',
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

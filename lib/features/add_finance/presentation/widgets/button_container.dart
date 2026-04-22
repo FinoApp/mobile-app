@@ -16,7 +16,7 @@ class ButtonContainer extends ConsumerWidget {
     final amountValue = ref.watch(amountProvider);
     final currency = ref.watch(currencyProvider).symbol;
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
@@ -27,13 +27,8 @@ class ButtonContainer extends ConsumerWidget {
       child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Result : ',
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
               Text(
                 amountValue.isEmpty ? '0 $currency' : '$amountValue $currency',
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
