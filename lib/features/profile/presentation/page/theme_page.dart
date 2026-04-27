@@ -21,7 +21,7 @@ class ThemePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text('Theme', style: Theme.of(context).textTheme.bodyLarge),
+        title: Text('Theme', style: Theme.of(context).textTheme.bodyMedium),
         leading: GestureDetector(
           child: Icon(Icons.arrow_back_ios),
           onTap: () => context.pop(),
@@ -39,7 +39,8 @@ class ThemePage extends ConsumerWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
-            separatorBuilder: (context, index) => CastomDivider(left: 16, right: 16),
+            separatorBuilder: (context, index) =>
+                CastomDivider(left: 16, right: 16),
             itemCount: themes.length,
             itemBuilder: (context, index) {
               final (mode, title, icon) = themes[index];

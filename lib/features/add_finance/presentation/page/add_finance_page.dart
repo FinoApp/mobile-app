@@ -46,7 +46,7 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
         child: Scaffold(
           appBar: AppBar(
             surfaceTintColor: Colors.transparent,
-            title: Text('Add', style: Theme.of(context).textTheme.bodyLarge),
+            title: Text('Add', style: Theme.of(context).textTheme.bodyMedium),
             toolbarHeight: 46,
           ),
           body: SizedBox.expand(
@@ -87,9 +87,10 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
                             SizedBox(height: 8),
                             Text(
                               'Please select a category',
-                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
+                              style: Theme.of(context).textTheme.bodySmall!
+                                  .copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
                             ),
                           ],
                           SizedBox(height: 16),
@@ -125,9 +126,9 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
     final selectDate = ref.read(selectDateProvider);
 
     if (selectIndexCategory == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a category')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please select a category')));
       return;
     }
 
@@ -152,10 +153,11 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
         }
       } on DioException catch (e) {
         if (mounted) {
-          final message = e.response?.data?['message'] ?? 'Failed to add expense';
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.toString())),
-          );
+          final message =
+              e.response?.data?['message'] ?? 'Failed to add expense';
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message.toString())));
         }
       }
     }
@@ -170,7 +172,11 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
     amountController.clear();
   }
 
-  Widget _buildLabel(BuildContext context, String text, {bool isRequired = false}) {
+  Widget _buildLabel(
+    BuildContext context,
+    String text, {
+    bool isRequired = false,
+  }) {
     return Row(
       children: [
         Text(

@@ -30,7 +30,7 @@ class CurrencyPage extends ConsumerWidget {
             surfaceTintColor: Colors.transparent,
             title: Text(
               'Currency',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             leading: GestureDetector(
               child: Icon(Icons.arrow_back_ios),

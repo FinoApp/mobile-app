@@ -17,7 +17,7 @@ class MainFinancePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(formatter, style: Theme.of(context).textTheme.bodyLarge),
+        title: Text(formatter, style: Theme.of(context).textTheme.bodyMedium),
         toolbarHeight: 46,
       ),
       body: SafeArea(

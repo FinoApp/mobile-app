@@ -10,7 +10,7 @@ class ProgressPage extends StatelessWidget {
         surfaceTintColor: Colors.transparent,
         title: Text(
           'Your Progress',
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         toolbarHeight: 46,
       ),

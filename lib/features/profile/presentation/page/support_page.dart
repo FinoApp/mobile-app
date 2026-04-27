@@ -12,7 +12,7 @@ class SupportPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text('Profile', style: Theme.of(context).textTheme.bodyLarge),
+        title: Text('Support', style: Theme.of(context).textTheme.bodyMedium),
         toolbarHeight: 46,
       ),
       body: SafeArea(

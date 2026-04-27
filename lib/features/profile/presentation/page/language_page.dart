@@ -29,7 +29,7 @@ class LanguagePage extends ConsumerWidget {
             surfaceTintColor: Colors.transparent,
             title: Text(
               'Language',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             leading: GestureDetector(
               child: Icon(Icons.arrow_back_ios),
