@@ -2,71 +2,61 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Build and Development Commands
+## Commands
 
 ```bash
-# Get dependencies
+# Dependencies
 flutter pub get
 
-# Run the app
+# Run
 flutter run
 
-# Run code generation (for freezed/json_serializable models)
+# Code generation (required after modifying freezed/json_serializable models)
 dart run build_runner build --delete-conflicting-outputs
-
-# Watch for changes and regenerate
 dart run build_runner watch --delete-conflicting-outputs
 
-# Analyze code
+# Lint
 flutter analyze
 
-# Run tests
-flutter test
-
-# Run a single test file
-flutter test test/widget_test.dart
+# Tests
+flutter test                                              # all unit & widget tests
+flutter test test/unit/                                   # unit tests only
+flutter test test/widget/                                 # widget tests only
+flutter test test/unit/validators/login_validators_test.dart  # single file
+flutter test integration_test/                            # integration tests (requires device)
 ```
 
-## Architecture Overview
+## Architecture
 
-This is a Flutter financial accounting application using a feature-based architecture with Riverpod for state management.
+Feature-based Flutter app. Each feature in `lib/features/` follows a `data/` (repository, models, providers) and `presentation/` (pages, widgets) split.
 
-### Core Technologies
-- **State Management**: Riverpod (`flutter_riverpod`)
-- **Routing**: go_router with authentication guards
-- **HTTP Client**: Dio with auth interceptor for token refresh
-- **UI Components**: shadcn_ui
-- **Models**: freezed + json_serializable for immutable data classes
-- **Charts**: fl_chart
-- **Secure Storage**: flutter_secure_storage for tokens
+**State management**: Riverpod. Some providers use `flutter_riverpod/legacy.dart` (`StateProvider`, `StateNotifier`) — do not migrate to the new API.
 
-### Directory Structure
+**Auth flow**: `isLoginProvider` (bool) drives GoRouter redirect logic in `lib/core/router/routers.dart`. Splash → `/auth` or `/home`. Unauthenticated users on protected routes redirect to `/auth`; authenticated users on auth routes redirect to `/home`.
 
-- `lib/core/` - Shared infrastructure
-  - `providers/` - Riverpod providers (dio, theme, user, token storage)
-  - `models/` - Shared data models (User, Category)
-  - `services/` - Auth interceptor, token storage
-  - `router/` - GoRouter configuration with auth redirect logic
-  - `theme/` - App theming (light/dark)
-  - `widgets/` - Reusable widgets including navigation bar
+**HTTP**: `dioProvider` creates a Dio instance with `AuthInterceptor` that automatically attaches Bearer tokens and retries on 401 with a refreshed token. Base URL: `http://3.80.90.99/api/v1`.
 
-- `lib/features/` - Feature modules, each following presentation/data pattern
-  - `auth/` - Login, register, auth utilities
-  - `main_finance/` - Dashboard with expense chart and categories
-  - `add_finance/` - Create/edit expenses
-  - `history/` - Expense history view
-  - `profile/` - User settings (theme, currency, language)
-  - `progress/` - Progress tracking
-  - `splash_screen/` - App splash animation
+**Tokens**: stored in `flutter_secure_storage` under keys `accessToken`, `refreshToken`, `userId` via `TokenStorage` service.
 
-### Key Patterns
+**Models**: freezed + json_serializable. Always run build_runner after changing model files.
 
-**Authentication Flow**: Routes are guarded in `lib/core/router/routers.dart`. The `isLoginProvider` controls redirect logic - unauthenticated users are sent to `/auth`, authenticated users on auth pages redirect to `/home`.
+## Testing
 
-**Data Models**: Located in `*.dart` files with corresponding `*.freezed.dart` and `*.g.dart` generated files. After modifying model classes, run build_runner to regenerate.
+- `test/unit/` — validators, model serialization, StateNotifier logic
+- `test/widget/` — page rendering and form validation (uses `ProviderScope` overrides + GoRouter)
+- `integration_test/` — full app flow on device
 
-**API Integration**: Dio provider at `lib/core/providers/dio_provider.dart` includes `AuthInterceptor` for automatic token management.
+Mocking: use `mocktail`. Create mocks with `class MockFoo extends Mock implements Foo {}`.
 
-### Analysis Configuration
+For widget tests, override providers via `ProviderScope(overrides: [...])` and wrap pages in `MaterialApp.router` with a minimal GoRouter (not `ShadApp`).
 
-Generated files (`*.freezed.dart`, `*.g.dart`) are excluded from analysis in `analysis_options.yaml`.
+## Known Quirks
+
+- `lib/core/providers/user_id_provdier.dart` — intentional typo in filename, do not rename
+- `EditCateogoryModel` — intentional typo in class name, do not rename
+- Firebase is commented out in `main.dart` — do not uncomment without setting up `firebase_options.dart`
+- `*.freezed.dart` and `*.g.dart` are excluded from analysis in `analysis_options.yaml`
+
+## Code Style
+
+- Never add comments or docstrings to code
