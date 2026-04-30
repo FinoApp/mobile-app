@@ -1,17 +1,49 @@
-# financial_ccounting
+# Fino — Expense Tracker
 
-A new Flutter project.
+A personal expense tracking app built with Flutter. Log your spending, organize it by category, and get a visual overview of your finances.
+
+---
+
+
+## Tech Stack
+
+| Layer | Library |
+|---|---|
+| Framework | Flutter 3.11+ |
+| State management | Riverpod 3 |
+| Navigation | GoRouter 17 |
+| HTTP | Dio 5 + custom `AuthInterceptor` |
+| Models | Freezed + json_serializable |
+| UI components | shadcn_ui, fl_chart, flutter_slidable |
+| Secure storage | flutter_secure_storage |
+
+---
+
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+**Prerequisites:** Flutter SDK 3.11+, Dart 3+
 
-A few resources to get you started if this is your first Flutter project:
+```bash
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+flutter pub get
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+dart run build_runner build --delete-conflicting-outputs
+
+flutter run
+```
+
+---
+
+## Running Tests
+
+```bash
+flutter test
+
+```
+
+---
+
+## Environment
+
+Base API URL: `lib/core/constants/api_constants.dart`
