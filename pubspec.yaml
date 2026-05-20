@@ -1,5 +1,5 @@
 name: financial_ccounting
-description: "A new Flutter project."
+description: "A personal finance tracking app for managing expenses and categories."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -51,6 +51,8 @@ dependencies:
   firebase_crashlytics: ^5.2.0
   firebase_analytics: ^12.3.0
   firebase_messaging: ^16.2.0
+  printing: ^5.14.3
+  pdf: ^3.12.0
 
 dev_dependencies:
   flutter_test:

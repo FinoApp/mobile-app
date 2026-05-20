@@ -1,7 +1,9 @@
+import 'package:financial_ccounting/core/services/pdf_export_service.dart';
 import 'package:financial_ccounting/core/theme/color.dart';
 import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:financial_ccounting/features/history/presentation/widgets/extense_history_container.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -47,6 +49,16 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
         surfaceTintColor: Colors.transparent,
         title: Text('History', style: Theme.of(context).textTheme.bodyMedium),
         toolbarHeight: 46,
+        actions: [
+          GestureDetector(
+            child: Icon(CupertinoIcons.printer),
+            onTap: () async {
+              final data = expenseList.value;
+              if (data == null || data.isEmpty) return;
+              await PdfExportService().exportExpenses(data, currency);
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
