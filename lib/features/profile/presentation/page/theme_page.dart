@@ -30,11 +30,10 @@ class ThemePage extends ConsumerWidget {
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onPrimary,
-            borderRadius: BorderRadius.circular(12),
-          ),
+        child: Material(
+          color: Theme.of(context).colorScheme.onPrimary,
+          borderRadius: BorderRadius.circular(12),
+          clipBehavior: Clip.antiAlias,
           child: ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),

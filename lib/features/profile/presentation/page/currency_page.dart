@@ -51,43 +51,45 @@ class CurrencyPage extends ConsumerWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    child: Material(
                       color: Theme.of(context).colorScheme.onPrimary,
                       borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListView.separated(
-                      padding: EdgeInsets.zero,
-                      separatorBuilder: (context, index) =>
-                          CastomDivider(left: 16, right: 16),
-                      itemCount: CurrencyEnum.values.length,
-                      itemBuilder: (context, index) {
-                        final currency = CurrencyEnum.values[index];
-                        final isSelected = currency == currentCurrency;
-                        return ListTile(
-                          onTap: () =>
-                              ref.read(currencyProvider.notifier).state =
-                                  currency,
-                          trailing: isSelected
-                              ? Icon(
-                                  Icons.check,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )
-                              : null,
-                          leading: Text(
-                            currency.symbol,
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Theme.of(context).colorScheme.primary,
+                      clipBehavior: Clip.antiAlias,
+                      child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        separatorBuilder: (context, index) =>
+                            CastomDivider(left: 16, right: 16),
+                        itemCount: CurrencyEnum.values.length,
+                        itemBuilder: (context, index) {
+                          final currency = CurrencyEnum.values[index];
+                          final isSelected = currency == currentCurrency;
+                          return ListTile(
+                            onTap: () =>
+                                ref.read(currencyProvider.notifier).state =
+                                    currency,
+                            trailing: isSelected
+                                ? Icon(
+                                    Icons.check,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                : null,
+                            leading: Text(
+                              currency.symbol,
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
-                          ),
-                          title: Text(
-                            currency.title,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        );
-                      },
+                            title: Text(
+                              currency.title,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

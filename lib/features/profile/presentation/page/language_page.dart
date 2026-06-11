@@ -50,40 +50,42 @@ class LanguagePage extends ConsumerWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    child: Material(
                       color: Theme.of(context).colorScheme.onPrimary,
                       borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListView.separated(
-                      padding: EdgeInsets.zero,
-                      separatorBuilder: (context, index) =>
-                          CastomDivider(left: 16, right: 16),
-                      itemCount: LanguageEnum.values.length,
-                      itemBuilder: (context, index) {
-                        final language = LanguageEnum.values[index];
-                        final isSelected = language == currentLanguage;
-                        return ListTile(
-                          onTap: () =>
-                              ref.read(languageProvider.notifier).state =
-                                  language,
-                          trailing: isSelected
-                              ? Icon(
-                                  Icons.check,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )
-                              : null,
-                          leading: Text(
-                            language.flag,
-                            style: TextStyle(fontSize: 24),
-                          ),
-                          title: Text(
-                            language.title,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        );
-                      },
+                      clipBehavior: Clip.antiAlias,
+                      child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        separatorBuilder: (context, index) =>
+                            CastomDivider(left: 16, right: 16),
+                        itemCount: LanguageEnum.values.length,
+                        itemBuilder: (context, index) {
+                          final language = LanguageEnum.values[index];
+                          final isSelected = language == currentLanguage;
+                          return ListTile(
+                            onTap: () =>
+                                ref.read(languageProvider.notifier).state =
+                                    language,
+                            trailing: isSelected
+                                ? Icon(
+                                    Icons.check,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                : null,
+                            leading: Text(
+                              language.flag,
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            title: Text(
+                              language.title,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
