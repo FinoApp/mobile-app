@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 
 class NavItem extends StatelessWidget {
   final IconData icon;
+  final IconData iconSelected;
   final String text;
   final bool selected;
   final VoidCallback onTap;
+
   const NavItem({
     super.key,
     required this.icon,
+    required this.iconSelected,
     required this.text,
     required this.selected,
     required this.onTap,
@@ -15,29 +18,59 @@ class NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final pillColor = isDark
+        ? primary.withValues(alpha: 0.15)
+        : primary.withValues(alpha: 0.12);
+
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            size: 30,
-            icon,
-            color: selected
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.onSecondary,
-          ),
-          SizedBox(height: 4),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 200),
-            width: selected ? 6 : 0,
-            height: selected ? 6 : 0,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              shape: BoxShape.circle,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        padding: EdgeInsets.symmetric(
+          horizontal: selected ? 14 : 12,
+          vertical: 8,
+        ),
+        decoration: BoxDecoration(
+          color: selected ? pillColor : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: Icon(
+                selected ? iconSelected : icon,
+                key: ValueKey(selected),
+                size: 22,
+                color: selected
+                    ? primary
+                    : Theme.of(context).colorScheme.onSecondary,
+              ),
             ),
-          ),
-        ],
+            AnimatedSize(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              child: selected
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: primary,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ],
+        ),
       ),
     );
   }
