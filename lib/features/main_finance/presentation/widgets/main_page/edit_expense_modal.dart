@@ -4,6 +4,7 @@ import 'package:financial_ccounting/features/add_finance/presentation/widgets/am
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/category.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/note.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/title.dart';
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -54,6 +55,7 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
   Widget build(BuildContext context) {
     final selectIndexCategory = ref.watch(selectedIndexCategoryProvider);
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final l10n = ref.watch(localizationProvider);
 
     return Dialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -83,7 +85,7 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                   ),
                   SizedBox(width: 12),
                   Text(
-                    'Edit Expense',
+                    l10n.editExpense,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -94,7 +96,7 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
 
               // Title field
               Text(
-                'Title',
+                l10n.titleLabel,
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary,
                 ),
@@ -102,27 +104,27 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
               SizedBox(height: 6),
               TitleField(
                 titleController: titleController,
-                validator: (value) => fieldsValidator(value),
+                validator: (value) => fieldsValidator(value, l10n),
               ),
               SizedBox(height: 12),
 
               // Amount field
               Text(
-                'Amount',
+                l10n.amountLabel,
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
               SizedBox(height: 6),
               Amount(
-                validator: (value) => fieldsValidator(value),
+                validator: (value) => fieldsValidator(value, l10n),
                 controller: amountController,
               ),
               SizedBox(height: 12),
 
               // Category
               Text(
-                'Category',
+                l10n.categoryLabel,
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary,
                 ),
@@ -154,7 +156,7 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
 
               // Note field
               Text(
-                'Note',
+                l10n.noteLabel,
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary,
                 ),
@@ -180,7 +182,7 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                         ),
                         child: Center(
                           child: Text(
-                            'Cancel',
+                            l10n.cancel,
                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontWeight: FontWeight.w500,
                               color: isLight ? Colors.black54 : Colors.white54,
@@ -209,14 +211,14 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                                 );
                             ref.invalidate(expenseListProvider);
                             if (context.mounted) {
-                              showSuccessSnackbar(context, 'Expense updated');
+                              showSuccessSnackbar(context, l10n.expenseUpdated);
                               context.pop();
                               context.pop();
                             }
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Failed to update expense')),
+                                SnackBar(content: Text(l10n.failedToUpdateExpense)),
                               );
                             }
                           }
@@ -230,7 +232,7 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                         ),
                         child: Center(
                           child: Text(
-                            'Save',
+                            l10n.save,
                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontWeight: FontWeight.w500,
                               color: Colors.white,

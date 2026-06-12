@@ -1,5 +1,6 @@
 import 'package:financial_ccounting/core/models/category_model/category_model.dart';
 import 'package:financial_ccounting/features/add_finance/utils/fields_validator.dart';
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -81,6 +82,7 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final l10n = ref.watch(localizationProvider);
 
     return Dialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -108,7 +110,7 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  'Edit Category',
+                  l10n.editCategory,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600),
@@ -124,31 +126,31 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Title',
+                    l10n.titleLabel,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: Theme.of(context).colorScheme.onSecondary,
                     ),
                   ),
                   SizedBox(height: 6),
                   TextFormField(
-                    validator: (value) => fieldsValidator(value),
+                    validator: (value) => fieldsValidator(value, l10n),
                     controller: titleController,
                     maxLength: 30,
-                    decoration: _inputDecoration(context, 'Enter title'),
+                    decoration: _inputDecoration(context, l10n.enterTitleHint),
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Icon',
+                    l10n.icon,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: Theme.of(context).colorScheme.onSecondary,
                     ),
                   ),
                   SizedBox(height: 6),
                   TextFormField(
-                    validator: (value) => fieldsValidator(value),
+                    validator: (value) => fieldsValidator(value, l10n),
                     maxLength: 2,
                     controller: emojiController,
-                    decoration: _inputDecoration(context, 'Enter emoji'),
+                    decoration: _inputDecoration(context, l10n.enterEmojiHint),
                   ),
                   SizedBox(height: 16),
 
@@ -171,7 +173,7 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                             ),
                             child: Center(
                               child: Text(
-                                'Cancel',
+                                l10n.cancel,
                                 style: Theme.of(context).textTheme.bodyMedium!
                                     .copyWith(
                                       fontWeight: FontWeight.w500,
@@ -203,7 +205,7 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                                 if (context.mounted) {
                                   showSuccessSnackbar(
                                     context,
-                                    'Category updated',
+                                    l10n.categoryUpdated,
                                   );
                                   context.pop();
                                 }
@@ -212,7 +214,7 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        'Failed to update category',
+                                        l10n.failedToUpdateCategory,
                                       ),
                                     ),
                                   );
@@ -230,7 +232,7 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                             ),
                             child: Center(
                               child: Text(
-                                'Save',
+                                l10n.save,
                                 style: Theme.of(context).textTheme.bodyMedium!
                                     .copyWith(
                                       fontWeight: FontWeight.w500,

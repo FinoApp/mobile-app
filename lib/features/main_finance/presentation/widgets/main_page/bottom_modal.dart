@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:financial_ccounting/core/widgets/divider.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
 import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/widgets/main_page/edit_expense_modal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ void bottomModal({
   required BuildContext context,
   required GetExpenseModel expense,
 }) {
+  final l10n = ProviderScope.containerOf(context).read(localizationProvider);
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
@@ -107,7 +109,7 @@ void bottomModal({
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 14),
                               child: Text(
-                                'Category',
+                                l10n.categoryLabel,
                                 style: Theme.of(context).textTheme.bodyMedium!
                                     .copyWith(
                                       color: Theme.of(
@@ -130,7 +132,7 @@ void bottomModal({
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 14),
                               child: Text(
-                                'Date',
+                                l10n.dateLabel,
                                 style: Theme.of(context).textTheme.bodyMedium!
                                     .copyWith(
                                       color: Theme.of(
@@ -155,7 +157,7 @@ void bottomModal({
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 14),
                               child: Text(
-                                'Note',
+                                l10n.noteLabel,
                                 style: Theme.of(context).textTheme.bodyMedium!
                                     .copyWith(
                                       color: Theme.of(
@@ -197,6 +199,7 @@ class BottoModalButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final l10n = ref.watch(localizationProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -221,7 +224,7 @@ class BottoModalButton extends ConsumerWidget {
                     ),
                     SizedBox(width: 6),
                     Text(
-                      'Delete',
+                      l10n.delete,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Theme.of(context).colorScheme.error,
                         fontWeight: FontWeight.w500,
@@ -234,10 +237,8 @@ class BottoModalButton extends ConsumerWidget {
                 try {
                   await ref.read(expenseRepositoryProvider).deleteExpense(id);
                   ref.invalidate(expenseListProvider);
-                  context.pop();
-                } on DioException catch (e) {
-                  print(e);
-                }
+                  if (context.mounted) context.pop();
+                } on DioException catch (_) {}
               },
             ),
           ),
@@ -272,7 +273,7 @@ class BottoModalButton extends ConsumerWidget {
                     ),
                     SizedBox(width: 6),
                     Text(
-                      'Edit',
+                      l10n.edit,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w500,

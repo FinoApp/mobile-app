@@ -20,6 +20,7 @@ class AllCategoriesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categoryList = ref.watch(categoryListProvider);
     final currency = ref.watch(currencyProvider).symbol;
+    final l10n = ref.watch(localizationProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +51,7 @@ class AllCategoriesPage extends ConsumerWidget {
         ],
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
-        title: Text('Categories', style: Theme.of(context).textTheme.bodyLarge),
+        title: Text(l10n.categoriesPageTitle, style: Theme.of(context).textTheme.bodyLarge),
         toolbarHeight: 46,
         leading: GestureDetector(
           child: Icon(Icons.arrow_back_ios),
@@ -145,7 +146,7 @@ class AllCategoriesPage extends ConsumerWidget {
                 ),
               ),
               error: (e, _) {
-                return Center(child: Text('Something went wrong, $e'));
+                return Center(child: Text('${l10n.somethingWentWrong} $e'));
               },
               loading: () => Center(child: CircularProgressIndicator()),
             ),
@@ -180,6 +181,7 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
     final selectColor = ref.watch(selectedColorProvider);
+    final l10n = ref.watch(localizationProvider);
 
     return Dialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -213,7 +215,7 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                   ),
                   SizedBox(width: 12),
                   Text(
-                    'New Category',
+                    l10n.newCategory,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -228,35 +230,35 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Title',
+                      l10n.titleLabel,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Theme.of(context).colorScheme.onSecondary,
                       ),
                     ),
                     SizedBox(height: 6),
                     TextFormField(
-                      validator: (value) => fieldsValidator(value),
+                      validator: (value) => fieldsValidator(value, l10n),
                       controller: titleController,
                       maxLength: 30,
-                      decoration: _inputDecoration(context, 'Enter title'),
+                      decoration: _inputDecoration(context, l10n.enterTitleHint),
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Icon',
+                      l10n.icon,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Theme.of(context).colorScheme.onSecondary,
                       ),
                     ),
                     SizedBox(height: 6),
                     TextFormField(
-                      validator: (value) => fieldsValidator(value),
+                      validator: (value) => fieldsValidator(value, l10n),
                       maxLength: 2,
                       controller: iconController,
-                      decoration: _inputDecoration(context, 'Enter emoji'),
+                      decoration: _inputDecoration(context, l10n.enterEmojiHint),
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Color',
+                      l10n.color,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Theme.of(context).colorScheme.onSecondary,
                       ),
@@ -338,7 +340,7 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                               ),
                               child: Center(
                                 child: Text(
-                                  'Cancel',
+                                  l10n.cancel,
                                   style: Theme.of(context).textTheme.bodyMedium!
                                       .copyWith(
                                         fontWeight: FontWeight.w500,
@@ -375,7 +377,7 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'Failed to create category',
+                                          l10n.failedToCreateCategory,
                                         ),
                                       ),
                                     );
@@ -393,7 +395,7 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                               ),
                               child: Center(
                                 child: Text(
-                                  'Create',
+                                  l10n.createButton,
                                   style: Theme.of(context).textTheme.bodyMedium!
                                       .copyWith(
                                         fontWeight: FontWeight.w500,
