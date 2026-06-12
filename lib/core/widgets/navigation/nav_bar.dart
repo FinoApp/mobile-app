@@ -1,17 +1,21 @@
+import 'package:financial_ccounting/core/l10n/app_localizations.dart';
 import 'package:financial_ccounting/core/widgets/navigation/nav_item.dart';
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class NavBar extends StatelessWidget {
+class NavBar extends ConsumerWidget {
   final Widget child;
   const NavBar({super.key, required this.child});
 
   static const _tabs = ['/home', '/progress', '/add', '/history', '/profile'];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final location = GoRouterState.of(context).uri.toString();
+    final l10n = ref.watch(localizationProvider);
 
     final currentIndex = _tabs.indexWhere((tab) {
       if (tab == '/home') return location == '/home';
@@ -36,6 +40,7 @@ class NavBar extends StatelessWidget {
         isDark: isDark,
         currentIndex: currentIndex,
         onTap: (i) => context.go(_tabs[i]),
+        l10n: l10n,
       ),
       body: child,
     );
@@ -79,12 +84,14 @@ class _FloatingNavBar extends StatelessWidget {
   final bool isDark;
   final int currentIndex;
   final void Function(int) onTap;
+  final AppLocalizations l10n;
 
   const _FloatingNavBar({
     required this.barColor,
     required this.isDark,
     required this.currentIndex,
     required this.onTap,
+    required this.l10n,
   });
 
   @override
@@ -119,14 +126,14 @@ class _FloatingNavBar extends StatelessWidget {
                   NavItem(
                     icon: Icons.grid_view_outlined,
                     iconSelected: Icons.grid_view_rounded,
-                    text: 'Spending',
+                    text: l10n.navSpending,
                     selected: currentIndex == 0,
                     onTap: () => onTap(0),
                   ),
                   NavItem(
                     icon: Icons.insights_outlined,
                     iconSelected: Icons.insights,
-                    text: 'Progress',
+                    text: l10n.navProgress,
                     selected: currentIndex == 1,
                     onTap: () => onTap(1),
                   ),
@@ -141,14 +148,14 @@ class _FloatingNavBar extends StatelessWidget {
                   NavItem(
                     icon: Icons.receipt_long_outlined,
                     iconSelected: Icons.receipt_long,
-                    text: 'History',
+                    text: l10n.navHistory,
                     selected: currentIndex == 3,
                     onTap: () => onTap(3),
                   ),
                   NavItem(
                     icon: Icons.person_outline_rounded,
                     iconSelected: Icons.person_rounded,
-                    text: 'Profile',
+                    text: l10n.navProfile,
                     selected: currentIndex == 4,
                     onTap: () => onTap(4),
                   ),
