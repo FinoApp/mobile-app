@@ -44,10 +44,11 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
     final expenseList = ref.watch(expenseListProvider);
     final currency = ref.watch(currencyProvider);
 
+    final l10n = ref.watch(localizationProvider);
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text('History', style: Theme.of(context).textTheme.bodyMedium),
+        title: Text(l10n.historyPageTitle, style: Theme.of(context).textTheme.bodyMedium),
         toolbarHeight: 46,
         actions: [
           GestureDetector(
@@ -88,7 +89,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                             ),
                             SizedBox(height: 16),
                             Text(
-                              'No Expenses Yet',
+                              l10n.noExpensesYet,
                               style: Theme.of(context).textTheme.bodyLarge!
                                   .copyWith(
                                     color: Theme.of(
@@ -99,8 +100,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                             SizedBox(height: 10),
 
                             Text(
-                              'You have no recorded expenses. Add\n'
-                              'a new expense to get started!',
+                              l10n.noExpensesDescription,
                               textAlign: TextAlign.center,
 
                               style: Theme.of(context).textTheme.bodyMedium!
@@ -131,7 +131,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                                 width: double.infinity,
                                 child: Center(
                                   child: Text(
-                                    'Add Expense',
+                                    l10n.addExpenseButton,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
@@ -178,8 +178,6 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                   ),
             loading: () => Center(child: CircularProgressIndicator.adaptive()),
             error: (error, stack) {
-              print('Error: $error');
-              print('Stack: $stack');
               return Center(child: Text('Error: $error'));
             },
           ),

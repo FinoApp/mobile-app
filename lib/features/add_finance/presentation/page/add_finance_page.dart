@@ -10,6 +10,7 @@ import 'package:financial_ccounting/features/add_finance/presentation/widgets/no
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/snackbar_success.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/title.dart';
 import 'package:financial_ccounting/features/add_finance/utils/fields_validator.dart';
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +39,7 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
   @override
   Widget build(BuildContext context) {
     final selectIndexCategory = ref.watch(selectedIndexCategoryProvider);
+    final l10n = ref.watch(localizationProvider);
 
     return Form(
       key: globalKey,
@@ -46,7 +48,7 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
         child: Scaffold(
           appBar: AppBar(
             surfaceTintColor: Colors.transparent,
-            title: Text('Add', style: Theme.of(context).textTheme.bodyMedium),
+            title: Text(l10n.addPageTitle, style: Theme.of(context).textTheme.bodyMedium),
             toolbarHeight: 46,
           ),
           body: SizedBox.expand(
@@ -66,27 +68,27 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel(context, 'Title', isRequired: true),
+                          _buildLabel(context, l10n.titleLabel, isRequired: true),
                           SizedBox(height: 6),
                           TitleField(
                             titleController: titleController,
-                            validator: (value) => fieldsValidator(value),
+                            validator: (value) => fieldsValidator(value, l10n),
                           ),
                           SizedBox(height: 16),
-                          _buildLabel(context, 'Amount', isRequired: true),
+                          _buildLabel(context, l10n.amountLabel, isRequired: true),
                           SizedBox(height: 6),
                           Amount(
                             controller: amountController,
-                            validator: (value) => fieldsValidator(value),
+                            validator: (value) => fieldsValidator(value, l10n),
                           ),
                           SizedBox(height: 16),
-                          _buildLabel(context, 'Category', isRequired: true),
+                          _buildLabel(context, l10n.categoryLabel, isRequired: true),
                           SizedBox(height: 10),
                           Category(radius: 36),
                           if (selectIndexCategory == null) ...[
                             SizedBox(height: 8),
                             Text(
-                              'Please select a category',
+                              l10n.pleaseSelectCategory,
                               style: Theme.of(context).textTheme.bodySmall!
                                   .copyWith(
                                     color: Theme.of(context).colorScheme.error,
@@ -94,11 +96,11 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
                             ),
                           ],
                           SizedBox(height: 16),
-                          _buildLabel(context, 'Date'),
+                          _buildLabel(context, l10n.dateLabel),
                           SizedBox(height: 8),
                           SingleDatePicker(),
                           SizedBox(height: 16),
-                          _buildLabel(context, 'Note'),
+                          _buildLabel(context, l10n.noteLabel),
                           SizedBox(height: 6),
                           Note(noteController: noteController),
                         ],
@@ -124,11 +126,12 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
     final amountValue = ref.read(amountProvider);
     final selectIndexCategory = ref.read(selectedIndexCategoryProvider);
     final selectDate = ref.read(selectDateProvider);
+    final l10n = ref.read(localizationProvider);
 
     if (selectIndexCategory == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Please select a category')));
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseSelectCategory)));
       return;
     }
 
@@ -149,12 +152,12 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
         ref.invalidate(expenseListProvider);
         ref.invalidate(categoryListProvider);
         if (mounted) {
-          showSuccessSnackbar(context, 'Expense added');
+          showSuccessSnackbar(context, l10n.expenseAdded);
         }
       } on DioException catch (e) {
         if (mounted) {
           final message =
-              e.response?.data?['message'] ?? 'Failed to add expense';
+              e.response?.data?['message'] ?? l10n.failedToAddExpense;
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(message.toString())));
