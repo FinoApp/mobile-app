@@ -45,33 +45,34 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     final isLight = Theme.of(context).brightness == Brightness.light;
     final currentLanguage = ref.watch(languageProvider);
     final currentCurrency = ref.watch(currencyProvider);
+    final l10n = ref.watch(localizationProvider);
 
     return Form(
       key: _globalKey,
       child: Column(
         children: [
           TextFieldwidget(
-            validator: (value) => registerNameValidator(value),
+            validator: (value) => registerNameValidator(value, l10n),
             controller: nameController,
             icon: Icons.person_pin_circle_outlined,
-            text: 'First Name',
+            text: l10n.firstName,
             contentPadding: EdgeInsets.symmetric(vertical: 20),
           ),
 
           SizedBox(height: 30),
           TextFieldwidget(
-            validator: (value) => registerNameValidator(value),
+            validator: (value) => registerNameValidator(value, l10n),
             controller: lastNameController,
             icon: Icons.person_pin_circle_outlined,
-            text: 'Last Name',
+            text: l10n.lastName,
             contentPadding: EdgeInsets.symmetric(vertical: 20),
           ),
           SizedBox(height: 30),
           TextFieldwidget(
-            validator: (value) => registerEmailValidator(value),
+            validator: (value) => registerEmailValidator(value, l10n),
             controller: emailController,
             icon: Icons.alternate_email_outlined,
-            text: 'Email',
+            text: l10n.email,
             contentPadding: EdgeInsets.symmetric(vertical: 20),
           ),
 
@@ -86,10 +87,10 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           ),
           SizedBox(height: 30),
           TextFieldwidget(
-            validator: (value) => registerPasswordValidator(value),
+            validator: (value) => registerPasswordValidator(value, l10n),
             controller: passwordController,
             icon: Icons.lock_outline_rounded,
-            text: 'Password',
+            text: l10n.password,
             suffix: GestureDetector(
               onTap: () => setState(() {
                 _isVisible = !_isVisible;
@@ -109,11 +110,12 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             validator: (value) => registerConfirmPasswordValidator(
               value,
               passwordController.text,
+              l10n,
             ),
             controller: confirmPasswordController,
             icon: Icons.lock_outline_rounded,
 
-            text: 'Confirm Password',
+            text: l10n.confirmPassword,
             suffix: GestureDetector(
               onTap: () => setState(() {
                 _isVisible = !_isVisible;
@@ -133,7 +135,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             child: _isLoading
                 ? CircularProgressIndicator()
                 : Text(
-                    'SIGN UP',
+                    l10n.signUpButton,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: isLight
                           ? Theme.of(context).colorScheme.surface
@@ -170,7 +172,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                   if (e.response!.statusCode == 400) {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Email already used')),
+                      SnackBar(content: Text(l10n.emailAlreadyUsed)),
                     );
                   }
                 }

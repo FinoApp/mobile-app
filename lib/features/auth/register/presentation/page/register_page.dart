@@ -1,13 +1,15 @@
-import 'package:financial_ccounting/features/auth/register/presentation/widgets/login_qauth.dart';
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:financial_ccounting/features/auth/register/presentation/widgets/register_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends ConsumerWidget {
   const RegisterPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = ref.watch(localizationProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryFixed,
       body: SafeArea(
@@ -19,7 +21,7 @@ class RegisterPage extends StatelessWidget {
               children: [
                 SizedBox(height: 50),
                 Text(
-                  'Sign Up',
+                  l10n.signUp,
                   style: Theme.of(
                     context,
                   ).textTheme.displayLarge!.copyWith(fontSize: 44),
@@ -27,44 +29,44 @@ class RegisterPage extends StatelessWidget {
                 SizedBox(height: 50),
                 RegisterForm(),
                 SizedBox(height: 50),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Divider(
-                        thickness: 1.5,
-                        indent: 54,
-                        endIndent: 10,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                    Text('OR', style: Theme.of(context).textTheme.displayLarge),
-                    Expanded(
-                      flex: 2,
-                      child: Divider(
-                        thickness: 1.5,
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       flex: 2,
+                //       child: Divider(
+                //         thickness: 1.5,
+                //         indent: 54,
+                //         endIndent: 10,
+                //         color: Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //     Text('OR', style: Theme.of(context).textTheme.displayLarge),
+                //     Expanded(
+                //       flex: 2,
+                //       child: Divider(
+                //         thickness: 1.5,
 
-                        indent: 10,
-                        endIndent: 54,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 28),
-                Text(
-                  'Sign Up With',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                LoginQauth(),
-                SizedBox(height: 30),
+                //         indent: 10,
+                //         endIndent: 54,
+                //         color: Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(height: 28),
+                // Text(
+                //   'Sign Up With',
+                //   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                //     color: Theme.of(context).colorScheme.onSurface,
+                //   ),
+                // ),
+                // LoginQauth(),
+                // SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already have an account?',
+                      l10n.alreadyHaveAccount,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -73,7 +75,7 @@ class RegisterPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () => context.go('/login'),
                       child: Text(
-                        'Sign In',
+                        l10n.signIn,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),

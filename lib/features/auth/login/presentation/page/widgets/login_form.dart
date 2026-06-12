@@ -3,6 +3,7 @@ import 'package:financial_ccounting/core/models/user_model/user.dart';
 import 'package:financial_ccounting/core/providers/is_login_provider.dart';
 import 'package:financial_ccounting/core/widgets/button_fill.dart';
 import 'package:financial_ccounting/features/auth/data/providers/auth_repository_provider.dart';
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:financial_ccounting/features/auth/register/presentation/widgets/text_field.dart';
 import 'package:financial_ccounting/features/auth/utils/login_validators.dart';
 import 'package:flutter/material.dart';
@@ -25,26 +26,27 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final l10n = ref.watch(localizationProvider);
     return Form(
       key: _globalKey,
       child: Column(
         children: [
           TextFieldwidget(
-            validator: (value) => loginEmailValidator(value),
+            validator: (value) => loginEmailValidator(value, l10n),
             controller: emailController,
             icon: Icons.alternate_email_outlined,
-            text: 'Email',
+            text: l10n.email,
             contentPadding: EdgeInsets.symmetric(vertical: 20),
           ),
           SizedBox(height: 30),
 
           TextFieldwidget(
-            validator: (value) => loginPasswordValidator(value),
+            validator: (value) => loginPasswordValidator(value, l10n),
             controller: passwordController,
             icon: Icons.lock_outline_rounded,
             contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
             isHide: _isVisible,
-            text: 'Password',
+            text: l10n.password,
             suffix: GestureDetector(
               onTap: () => setState(() {
                 _isVisible = !_isVisible;
@@ -62,7 +64,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             child: _isLoading
                 ? CircularProgressIndicator()
                 : Text(
-                    'SIGN IN',
+                    l10n.signInButton,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: isLight
                           ? Theme.of(context).colorScheme.surface
@@ -97,14 +99,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Enter correct email or password'),
+                        content: Text(l10n.enterCorrectEmailOrPassword),
                       ),
                     );
                   } else if (e.response!.statusCode == 404) {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text('User not found')));
+                    ).showSnackBar(SnackBar(content: Text(l10n.userNotFound)));
                   }
                 }
               }
