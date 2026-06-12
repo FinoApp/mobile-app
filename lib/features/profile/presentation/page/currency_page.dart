@@ -20,16 +20,17 @@ class CurrencyPage extends ConsumerWidget {
     final currentCurrency = ref.watch(currencyProvider);
     final userAsync = ref.watch(userProvider);
     final userId = ref.watch(userIdProvider);
+    final l10n = ref.watch(localizationProvider);
 
     return userAsync.when(
-      error: (error, stackTrace) => Center(child: Text('Someone wrong...')),
+      error: (error, stackTrace) => Center(child: Text(l10n.somethingWentWrong)),
       loading: () => Center(child: CircularProgressIndicator()),
       data: (user) {
         return Scaffold(
           appBar: AppBar(
             surfaceTintColor: Colors.transparent,
             title: Text(
-              'Currency',
+              l10n.currencyPageTitle,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             leading: GestureDetector(
@@ -106,15 +107,12 @@ class CurrencyPage extends ConsumerWidget {
                               userId.toString(),
                               EditUser(currency: currentCurrency.name),
                             );
-                        showSuccessSnackbar(
-                          context,
-                          'Currency edited successfully',
-                        );
                         ref.invalidate(userProvider);
                         ref.invalidate(currencyProvider);
-                      } catch (e) {
-                        print(e);
-                      }
+                        if (context.mounted) {
+                          showSuccessSnackbar(context, l10n.currencyEditedSuccessfully);
+                        }
+                      } catch (_) {}
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -125,7 +123,7 @@ class CurrencyPage extends ConsumerWidget {
                       width: double.infinity,
                       child: Center(
                         child: Text(
-                          'Change Currency',
+                          l10n.changeCurrency,
                           style: Theme.of(context).textTheme.bodyMedium!
                               .copyWith(color: AppColors.mainTextColorLight),
                         ),

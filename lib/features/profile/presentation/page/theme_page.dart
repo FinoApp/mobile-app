@@ -1,5 +1,6 @@
 import 'package:financial_ccounting/core/providers/theme_provider.dart';
 import 'package:financial_ccounting/core/widgets/divider.dart';
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,17 +12,18 @@ class ThemePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTheme = ref.watch(themeProvider);
+    final l10n = ref.watch(localizationProvider);
 
     final themes = [
-      (ThemeMode.light, 'Light', CupertinoIcons.sun_max_fill),
-      (ThemeMode.dark, 'Dark', CupertinoIcons.moon_fill),
-      (ThemeMode.system, 'System', CupertinoIcons.device_phone_portrait),
+      (ThemeMode.light, l10n.themeLight, CupertinoIcons.sun_max_fill),
+      (ThemeMode.dark, l10n.themeDark, CupertinoIcons.moon_fill),
+      (ThemeMode.system, l10n.themeSystem, CupertinoIcons.device_phone_portrait),
     ];
 
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text('Theme', style: Theme.of(context).textTheme.bodyMedium),
+        title: Text(l10n.themePageTitle, style: Theme.of(context).textTheme.bodyMedium),
         leading: GestureDetector(
           child: Icon(Icons.arrow_back_ios),
           onTap: () => context.pop(),

@@ -1,18 +1,21 @@
+import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SupportPage extends StatelessWidget {
+class SupportPage extends ConsumerWidget {
   const SupportPage({super.key});
 
   final String _supportEmail = "support@fino.com";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = ref.watch(localizationProvider);
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text('Support', style: Theme.of(context).textTheme.bodyMedium),
+        title: Text(l10n.supportPageTitle, style: Theme.of(context).textTheme.bodyMedium),
         toolbarHeight: 46,
       ),
       body: SafeArea(
@@ -39,14 +42,14 @@ class SupportPage extends StatelessWidget {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            'Contact Us',
+                            l10n.contactUs,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        'Have questions, suggestions, or found a bug? We would love to hear from you!',
+                        l10n.supportDescription,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSecondary,
@@ -92,7 +95,7 @@ class SupportPage extends StatelessWidget {
                       SizedBox(height: 6),
                       Center(
                         child: Text(
-                          'Tap to copy email',
+                          l10n.tapToCopyEmail,
                           style: Theme.of(context).textTheme.labelSmall
                               ?.copyWith(
                                 color: Theme.of(
@@ -123,28 +126,25 @@ class SupportPage extends StatelessWidget {
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            'FAQ',
+                            l10n.faq,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       _FaqItem(
-                        question: 'How do I add a new expense?',
-                        answer:
-                            'Tap the "+" button in the bottom navigation bar and fill in the expense details.',
+                        question: l10n.faqQuestion1,
+                        answer: l10n.faqAnswer1,
                       ),
                       const SizedBox(height: 12),
                       _FaqItem(
-                        question: 'Can I edit or delete an expense?',
-                        answer:
-                            'Yes, go to History or Home page, find the expense and swipe left to delete or tap to edit.',
+                        question: l10n.faqQuestion2,
+                        answer: l10n.faqAnswer2,
                       ),
                       const SizedBox(height: 12),
                       _FaqItem(
-                        question: 'How do I change the currency?',
-                        answer:
-                            'Go to Profile → Currency and select your preferred currency.',
+                        question: l10n.faqQuestion3,
+                        answer: l10n.faqAnswer3,
                       ),
                     ],
                   ),
