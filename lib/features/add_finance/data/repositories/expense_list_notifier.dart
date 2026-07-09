@@ -1,4 +1,4 @@
-import 'package:financial_ccounting/features/add_finance/data/repositories/expense_repository.dart';
+import 'package:financial_ccounting/features/add_finance/data/repositories/expense_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
@@ -6,7 +6,7 @@ import '../models/expense_model/expense_model.dart';
 
 class ExpenseListNotifier
     extends StateNotifier<AsyncValue<List<GetExpenseModel>>> {
-  final ExpenseRepository repository;
+  final ExpenseRepositoryImpl repository;
 
   ExpenseListNotifier(this.repository) : super(const AsyncValue.loading()) {
     loadInitial();

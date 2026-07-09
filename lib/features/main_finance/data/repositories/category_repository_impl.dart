@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:financial_ccounting/core/models/category_model/category_model.dart';
+import 'package:financial_ccounting/features/main_finance/domain/repositories/category_repository.dart';
 
-class CategoryRepository {
+class CategoryRepositoryImpl implements CategoryRepository {
   final Dio dio;
 
-  CategoryRepository({required this.dio});
+  CategoryRepositoryImpl({required this.dio});
 
+  @override
   Future<List<GetCategoryModel>> getCategory() async {
     try {
       final response = await dio.get('/categories/');
@@ -18,6 +20,7 @@ class CategoryRepository {
     }
   }
 
+  @override
   Future<void> createCategory(CategoryRequest category) async {
     try {
       await dio.post('/categories/', data: category.toJson());
@@ -26,6 +29,7 @@ class CategoryRepository {
     }
   }
 
+  @override
   Future<void> deleteCategory(int categoryId) async {
     try {
       await dio.delete('/categories/$categoryId/');
@@ -34,6 +38,7 @@ class CategoryRepository {
     }
   }
 
+  @override
   Future<void> editCategory(
     int categoryId,
     EditCateogoryModel editCategory,

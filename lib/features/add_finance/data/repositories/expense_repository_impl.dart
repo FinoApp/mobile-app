@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
 
-class ExpenseRepository {
+class ExpenseRepositoryImpl {
   final Dio dio;
-  ExpenseRepository({required this.dio});
+  ExpenseRepositoryImpl({required this.dio});
 
   Future<void> postExpense(CreateExpenseModel expense) async {
     await dio.post(
@@ -13,11 +13,6 @@ class ExpenseRepository {
     );
   }
 
-  // Future<List<GetExpenseModel>> getExpense() async {
-  //   final response = await dio.get('/consumptions/');
-  //   final list = response.data['result'] as List;
-  //   return list.map((expense) => GetExpenseModel.fromJson(expense)).toList();
-  // }
   Future<ExpensePaginationModel> getExpense({
     int limit = 10,
     int offset = 0,
