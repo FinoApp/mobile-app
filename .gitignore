@@ -57,3 +57,11 @@ google-services.json
 GoogleService-Info.plist
 lib/firebase_options.dart
 firebase.json
+
+
+# Generated/default Flutter launcher icons
+android/app/src/main/res/mipmap-*/ic_launcher.png
+ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-*.png
+macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_*.png
+web/favicon.png
+web/icons/*.png
