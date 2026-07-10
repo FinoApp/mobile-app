@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
-import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_data_provider.dart';
+import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_usecases_provider.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/amount.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/button_container.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/category.dart';
@@ -153,8 +153,8 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
     if (globalKey.currentState!.validate()) {
       try {
         await ref
-            .read(expenseRepositoryProvider)
-            .postExpense(
+            .read(createExpenseUseCaseProvider)
+            .call(
               CreateExpenseModel(
                 amount: double.parse(amountValue),
                 title: titleController.text,

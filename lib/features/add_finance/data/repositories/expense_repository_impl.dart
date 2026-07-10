@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
+import 'package:financial_ccounting/features/add_finance/domain/repositories/expense_repository.dart';
 
-class ExpenseRepositoryImpl {
+class ExpenseRepositoryImpl implements ExpenseRepository {
   final Dio dio;
   ExpenseRepositoryImpl({required this.dio});
 
+  @override
   Future<void> postExpense(CreateExpenseModel expense) async {
     await dio.post(
       '/consumptions/',
@@ -13,6 +15,7 @@ class ExpenseRepositoryImpl {
     );
   }
 
+  @override
   Future<ExpensePaginationModel> getExpense({
     int limit = 10,
     int offset = 0,
@@ -24,10 +27,12 @@ class ExpenseRepositoryImpl {
     return ExpensePaginationModel.fromJson(response.data);
   }
 
+  @override
   Future<void> deleteExpense(int consuptionId) async {
     await dio.delete('/consumptions/$consuptionId/');
   }
 
+  @override
   Future<void> editExpense(
     int consuptionId,
     UpdateExpenseModel updateExpense,

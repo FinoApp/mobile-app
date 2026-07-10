@@ -1,14 +1,15 @@
-import 'package:financial_ccounting/features/add_finance/data/repositories/expense_repository_impl.dart';
+import 'package:financial_ccounting/features/add_finance/domain/usecases/expenses_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-import '../models/expense_model/expense_model.dart';
+import '../../data/models/expense_model/expense_model.dart';
 
 class ExpenseListNotifier
     extends StateNotifier<AsyncValue<List<GetExpenseModel>>> {
-  final ExpenseRepositoryImpl repository;
+  final GetExpensesUseCase getExpensesUseCase;
 
-  ExpenseListNotifier(this.repository) : super(const AsyncValue.loading()) {
+  ExpenseListNotifier(this.getExpensesUseCase)
+    : super(const AsyncValue.loading()) {
     loadInitial();
   }
 
@@ -23,7 +24,7 @@ class ExpenseListNotifier
     state = AsyncValue.loading();
 
     try {
-      final response = await repository.getExpense(limit: limit, offset: 0);
+      final response = await getExpensesUseCase.call(limit: limit, offset: 0);
       offset = response.result.length;
       hasNext = response.hasNext;
       state = AsyncValue.data(response.result);
@@ -37,7 +38,7 @@ class ExpenseListNotifier
     isLoading = true;
 
     try {
-      final response = await repository.getExpense(
+      final response = await getExpensesUseCase.call(
         limit: limit,
         offset: offset,
       );
