@@ -1,6 +1,6 @@
 import 'package:financial_ccounting/core/models/category_model/category_model.dart';
 import 'package:financial_ccounting/features/add_finance/utils/fields_validator.dart';
-import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
+import 'package:financial_ccounting/features/main_finance/presentation/providers/category_usecase_provider.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/providers/select_color_provider.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/widgets/all_categories/category_card.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/widgets/all_categories/edit_category_modal.dart';
@@ -51,7 +51,10 @@ class AllCategoriesPage extends ConsumerWidget {
         ],
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
-        title: Text(l10n.categoriesPageTitle, style: Theme.of(context).textTheme.bodyLarge),
+        title: Text(
+          l10n.categoriesPageTitle,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
         toolbarHeight: 46,
         leading: GestureDetector(
           child: Icon(Icons.arrow_back_ios),
@@ -109,8 +112,8 @@ class AllCategoriesPage extends ConsumerWidget {
                               CustomSlidableAction(
                                 onPressed: (context) async {
                                   await ref
-                                      .read(categoryRepositoryProvider)
-                                      .deleteCategory(category.id);
+                                      .read(deleteCategoryUsecaseProvider)
+                                      .call(category.id);
                                   ref.invalidate(categoryListProvider);
                                 },
                                 backgroundColor: Colors.transparent,
@@ -240,7 +243,10 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                       validator: (value) => fieldsValidator(value, l10n),
                       controller: titleController,
                       maxLength: 30,
-                      decoration: _inputDecoration(context, l10n.enterTitleHint),
+                      decoration: _inputDecoration(
+                        context,
+                        l10n.enterTitleHint,
+                      ),
                     ),
                     SizedBox(height: 4),
                     Text(
@@ -254,7 +260,10 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                       validator: (value) => fieldsValidator(value, l10n),
                       maxLength: 2,
                       controller: iconController,
-                      decoration: _inputDecoration(context, l10n.enterEmojiHint),
+                      decoration: _inputDecoration(
+                        context,
+                        l10n.enterEmojiHint,
+                      ),
                     ),
                     SizedBox(height: 4),
                     Text(
@@ -360,8 +369,8 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                               if (globalKey.currentState!.validate()) {
                                 try {
                                   await ref
-                                      .read(categoryRepositoryProvider)
-                                      .createCategory(
+                                      .read(addCategoryUsecaseProvider)
+                                      .call(
                                         CategoryRequest(
                                           title: titleController.text,
                                           color: selectColor,

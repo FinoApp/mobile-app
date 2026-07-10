@@ -1,7 +1,7 @@
 import 'package:financial_ccounting/core/models/category_model/category_model.dart';
 import 'package:financial_ccounting/features/add_finance/utils/fields_validator.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
-import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
+import 'package:financial_ccounting/features/main_finance/presentation/providers/category_usecase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -193,14 +193,15 @@ class _EditCategoryModalState extends ConsumerState<EditCategoryModal> {
                             if (globalKey.currentState!.validate()) {
                               try {
                                 await ref
-                                    .read(categoryRepositoryProvider)
-                                    .editCategory(
+                                    .read(editCategoryUsecaseProvider)
+                                    .call(
                                       widget.categoryId,
                                       EditCateogoryModel(
                                         title: titleController.text,
                                         icon: emojiController.text,
                                       ),
                                     );
+
                                 ref.invalidate(categoryListProvider);
                                 if (context.mounted) {
                                   showSuccessSnackbar(

@@ -11,7 +11,7 @@ import 'package:financial_ccounting/features/add_finance/presentation/widgets/sn
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/title.dart';
 import 'package:financial_ccounting/features/add_finance/utils/fields_validator.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
-import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
+import 'package:financial_ccounting/features/main_finance/presentation/providers/category_usecase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,7 +48,10 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
         child: Scaffold(
           appBar: AppBar(
             surfaceTintColor: Colors.transparent,
-            title: Text(l10n.addPageTitle, style: Theme.of(context).textTheme.bodyMedium),
+            title: Text(
+              l10n.addPageTitle,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             toolbarHeight: 46,
           ),
           body: SizedBox.expand(
@@ -68,21 +71,33 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel(context, l10n.titleLabel, isRequired: true),
+                          _buildLabel(
+                            context,
+                            l10n.titleLabel,
+                            isRequired: true,
+                          ),
                           SizedBox(height: 6),
                           TitleField(
                             titleController: titleController,
                             validator: (value) => fieldsValidator(value, l10n),
                           ),
                           SizedBox(height: 16),
-                          _buildLabel(context, l10n.amountLabel, isRequired: true),
+                          _buildLabel(
+                            context,
+                            l10n.amountLabel,
+                            isRequired: true,
+                          ),
                           SizedBox(height: 6),
                           Amount(
                             controller: amountController,
                             validator: (value) => fieldsValidator(value, l10n),
                           ),
                           SizedBox(height: 16),
-                          _buildLabel(context, l10n.categoryLabel, isRequired: true),
+                          _buildLabel(
+                            context,
+                            l10n.categoryLabel,
+                            isRequired: true,
+                          ),
                           SizedBox(height: 10),
                           Category(radius: 36),
                           if (selectIndexCategory == null) ...[
