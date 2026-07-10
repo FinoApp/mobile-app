@@ -2,7 +2,6 @@ import 'package:financial_ccounting/core/constants/currency_enum.dart';
 import 'package:financial_ccounting/core/models/user_model/user.dart';
 import 'package:financial_ccounting/core/providers/user_id_provdier.dart';
 import 'package:financial_ccounting/core/providers/user_provider.dart';
-import 'package:financial_ccounting/core/providers/user_repository_provider.dart';
 import 'package:financial_ccounting/core/widgets/divider.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,8 @@ class CurrencyPage extends ConsumerWidget {
     final l10n = ref.watch(localizationProvider);
 
     return userAsync.when(
-      error: (error, stackTrace) => Center(child: Text(l10n.somethingWentWrong)),
+      error: (error, stackTrace) =>
+          Center(child: Text(l10n.somethingWentWrong)),
       loading: () => Center(child: CircularProgressIndicator()),
       data: (user) {
         return Scaffold(
@@ -73,8 +73,9 @@ class CurrencyPage extends ConsumerWidget {
                             trailing: isSelected
                                 ? Icon(
                                     Icons.check,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                   )
                                 : null,
                             leading: Text(
@@ -102,15 +103,18 @@ class CurrencyPage extends ConsumerWidget {
                     onTap: () async {
                       try {
                         await ref
-                            .read(userRepositoryProvider)
-                            .editUser(
+                            .read(editUserUsecaseProvider)
+                            .call(
                               userId.toString(),
                               EditUser(currency: currentCurrency.name),
                             );
                         ref.invalidate(userProvider);
                         ref.invalidate(currencyProvider);
                         if (context.mounted) {
-                          showSuccessSnackbar(context, l10n.currencyEditedSuccessfully);
+                          showSuccessSnackbar(
+                            context,
+                            l10n.currencyEditedSuccessfully,
+                          );
                         }
                       } catch (_) {}
                     },

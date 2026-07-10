@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:financial_ccounting/core/models/user_model/user.dart';
-import 'package:financial_ccounting/core/providers/user_id_provdier.dart';
 import 'package:financial_ccounting/core/services/token_storage.dart';
 import 'package:financial_ccounting/features/auth/domain/repositories/auth_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final Dio dio;
@@ -21,7 +19,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> login(PostLoginUser user, WidgetRef ref) async {
+  Future<int> login(PostLoginUser user) async {
     final response = await dio.post(
       '/auth/login',
       data: user.toJson(),
@@ -35,7 +33,7 @@ class AuthRepositoryImpl implements AuthRepository {
     await storage.saveUserId(userId.toString());
     await storage.safeTokens(access, refresh);
 
-    ref.read(userIdProvider.notifier).state = userId;
+    return userId;
   }
 
   @override

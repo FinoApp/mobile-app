@@ -6,7 +6,6 @@ import '../../../../core/constants/language_enum.dart';
 import '../../../../core/models/user_model/user.dart';
 import '../../../../core/providers/user_id_provdier.dart';
 import '../../../../core/providers/user_provider.dart';
-import '../../../../core/providers/user_repository_provider.dart';
 import '../../../../core/theme/color.dart';
 import '../../../add_finance/presentation/widgets/snackbar_success.dart';
 import '../../../auth/data/providers/lang_currency_provider.dart';
@@ -22,7 +21,8 @@ class LanguagePage extends ConsumerWidget {
     final l10n = ref.watch(localizationProvider);
 
     return userAsync.when(
-      error: (error, stackTrace) => Center(child: Text(l10n.somethingWentWrong)),
+      error: (error, stackTrace) =>
+          Center(child: Text(l10n.somethingWentWrong)),
       loading: () => Center(child: CircularProgressIndicator()),
       data: (user) {
         return Scaffold(
@@ -72,8 +72,9 @@ class LanguagePage extends ConsumerWidget {
                             trailing: isSelected
                                 ? Icon(
                                     Icons.check,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                   )
                                 : null,
                             leading: Text(
@@ -98,14 +99,17 @@ class LanguagePage extends ConsumerWidget {
                     onTap: () async {
                       try {
                         await ref
-                            .read(userRepositoryProvider)
-                            .editUser(
+                            .read(editUserUsecaseProvider)
+                            .call(
                               userId.toString(),
                               EditUser(language: currentLanguage.name),
                             );
                         ref.invalidate(userProvider);
                         if (context.mounted) {
-                          showSuccessSnackbar(context, l10n.languageEditedSuccessfully);
+                          showSuccessSnackbar(
+                            context,
+                            l10n.languageEditedSuccessfully,
+                          );
                         }
                       } catch (_) {}
                     },
