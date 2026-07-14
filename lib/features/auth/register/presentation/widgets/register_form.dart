@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/core/models/user_model/user.dart';
 import 'package:financial_ccounting/core/widgets/button_fill.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
-import 'package:financial_ccounting/features/auth/presentation/providers/auth_usecase_provider.dart';
+import 'package:financial_ccounting/features/auth/domain/auth_usecase.dart';
 import 'package:financial_ccounting/features/auth/register/presentation/widgets/dropdown_button_currency.dart';
 import 'package:financial_ccounting/features/auth/register/presentation/widgets/dropdown_button_language.dart';
 import 'package:financial_ccounting/features/auth/register/presentation/widgets/text_field.dart';
@@ -148,18 +149,16 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                   _isLoading = true;
                 });
                 try {
-                  await ref
-                      .read(registerUsecaseProvider)
-                      .call(
-                        PostRegisterUser(
-                          firstName: nameController.text,
-                          lastName: lastNameController.text,
-                          email: emailController.text,
-                          currency: currentCurrency.name,
-                          language: currentLanguage.name,
-                          password: passwordController.text,
-                        ),
-                      );
+                  await getIt<RegisterUsecase>().call(
+                    PostRegisterUser(
+                      firstName: nameController.text,
+                      lastName: lastNameController.text,
+                      email: emailController.text,
+                      currency: currentCurrency.name,
+                      language: currentLanguage.name,
+                      password: passwordController.text,
+                    ),
+                  );
                   setState(() {
                     _isLoading = false;
                   });

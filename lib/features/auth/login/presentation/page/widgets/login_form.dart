@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/core/models/user_model/user.dart';
 import 'package:financial_ccounting/core/providers/is_login_provider.dart';
 import 'package:financial_ccounting/core/providers/user_id_provdier.dart';
 import 'package:financial_ccounting/core/widgets/button_fill.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
-import 'package:financial_ccounting/features/auth/presentation/providers/auth_usecase_provider.dart';
+import 'package:financial_ccounting/features/auth/domain/auth_usecase.dart';
 import 'package:financial_ccounting/features/auth/register/presentation/widgets/text_field.dart';
 import 'package:financial_ccounting/features/auth/utils/login_validators.dart';
 import 'package:flutter/material.dart';
@@ -79,14 +80,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   _isLoading = true;
                 });
                 try {
-                  final userId = await ref
-                      .read(loginUsecaseProvider)
-                      .call(
-                        PostLoginUser(
-                          email: emailController.text,
-                          password: passwordController.text,
-                        ),
-                      );
+                  final userId = await getIt<LoginUsecase>().call(
+                    PostLoginUser(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    ),
+                  );
                   setState(() {
                     _isLoading = false;
                   });

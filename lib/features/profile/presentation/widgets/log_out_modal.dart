@@ -1,9 +1,10 @@
+import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/core/providers/is_login_provider.dart';
 import 'package:financial_ccounting/core/providers/user_id_provdier.dart';
 import 'package:financial_ccounting/core/providers/user_provider.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_usecases_provider.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
-import 'package:financial_ccounting/features/auth/presentation/providers/auth_usecase_provider.dart';
+import 'package:financial_ccounting/features/auth/domain/auth_usecase.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/providers/category_usecase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,7 +95,7 @@ class LogOutModal extends ConsumerWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
-                      await ref.read(logOutUsecaseProvider).call();
+                      await getIt<LogOutUsecase>().call();
                       ref.invalidate(categoryListProvider);
                       ref.invalidate(expenseListProvider);
                       ref.invalidate(userProvider);

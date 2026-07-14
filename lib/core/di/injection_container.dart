@@ -7,6 +7,7 @@ import 'package:financial_ccounting/core/services/token_storage.dart';
 import 'package:financial_ccounting/features/add_finance/data/repositories/expense_repository_impl.dart';
 import 'package:financial_ccounting/features/add_finance/domain/repositories/expense_repository.dart';
 import 'package:financial_ccounting/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:financial_ccounting/features/auth/domain/auth_usecase.dart';
 import 'package:financial_ccounting/features/auth/domain/repositories/auth_repository.dart';
 import 'package:financial_ccounting/features/main_finance/data/repositories/category_repository_impl.dart';
 import 'package:financial_ccounting/features/main_finance/domain/repositories/category_repository.dart';
@@ -51,5 +52,21 @@ Future<void> configureDependencies({
   );
   getIt.registerLazySingleton<CategoryRepository>(
     () => CategoryRepositoryImpl(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<RegisterUsecase>(
+    () => RegisterUsecase(repository: getIt<AuthRepository>()),
+  );
+
+  getIt.registerLazySingleton<LoginUsecase>(
+    () => LoginUsecase(repository: getIt<AuthRepository>()),
+  );
+
+  getIt.registerLazySingleton<RefreshUsecase>(
+    () => RefreshUsecase(repository: getIt<AuthRepository>()),
+  );
+
+  getIt.registerLazySingleton<LogOutUsecase>(
+    () => LogOutUsecase(repository: getIt<AuthRepository>()),
   );
 }
