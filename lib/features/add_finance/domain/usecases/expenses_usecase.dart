@@ -1,3 +1,4 @@
+import 'package:financial_ccounting/core/errors/failure.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
 import 'package:financial_ccounting/features/add_finance/domain/repositories/expense_repository.dart';
 
@@ -17,8 +18,8 @@ class DeleteExpensesUseCase {
   DeleteExpensesUseCase({required this.repository});
 
   Future<void> call(int expenseId) {
-    if (expenseId < 0) {
-      throw ArgumentError('Invalid id');
+    if (expenseId <= 0) {
+      throw const ValidationFailure('Invalid expense id');
     }
     return repository.deleteExpense(expenseId);
   }
@@ -30,8 +31,8 @@ class EditExpensesUseCase {
   EditExpensesUseCase({required this.repository});
 
   Future<void> call(int expenseId, UpdateExpenseModel expense) {
-    if (expenseId < 0) {
-      throw ArgumentError('Invalid id');
+    if (expenseId <= 0) {
+      throw const ValidationFailure('Invalid expense id');
     }
     return repository.editExpense(expenseId, expense);
   }

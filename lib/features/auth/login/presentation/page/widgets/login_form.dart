@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:financial_ccounting/core/di/injection_container.dart';
+import 'package:financial_ccounting/core/errors/failure.dart';
 import 'package:financial_ccounting/core/models/user_model/user.dart';
 import 'package:financial_ccounting/core/providers/is_login_provider.dart';
 import 'package:financial_ccounting/core/providers/user_id_provdier.dart';
@@ -91,22 +91,21 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   });
                   ref.read(userIdProvider.notifier).state = userId;
                   ref.read(isLoginProvider.notifier).state = true;
-                } on DioException catch (e) {
+                } on Failure catch (failure) {
                   setState(() {
                     _isLoading = false;
                   });
-                  if (e.response!.statusCode == 422 ||
-                      e.response!.statusCode == 401) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.enterCorrectEmailOrPassword)),
-                    );
-                  } else if (e.response!.statusCode == 404) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(l10n.userNotFound)));
-                  }
+                  if (!context.mounted) return;
+
+                  final message = switch (failure) {
+                    UnauthorizedFailure() ||
+                    ValidationFailure() => l10n.enterCorrectEmailOrPassword,
+                    NotFoundFailure() => l10n.userNotFound,
+                    _ => failure.message,
+                  };
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
                 }
               }
             },

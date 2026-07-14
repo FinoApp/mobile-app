@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:financial_ccounting/core/di/injection_container.dart';
+import 'package:financial_ccounting/core/errors/failure.dart';
 import 'package:financial_ccounting/core/models/user_model/user.dart';
 import 'package:financial_ccounting/core/widgets/button_fill.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
@@ -165,16 +165,20 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
 
                   if (!context.mounted) return;
                   context.go('/login');
-                } on DioException catch (e) {
+                } on Failure catch (failure) {
                   setState(() {
                     _isLoading = false;
                   });
-                  if (e.response!.statusCode == 400) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.emailAlreadyUsed)),
-                    );
-                  }
+                  if (!context.mounted) return;
+
+                  final message = switch (failure) {
+                    ValidationFailure() ||
+                    ConflictFailure() => l10n.emailAlreadyUsed,
+                    _ => failure.message,
+                  };
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
                 }
               }
             },

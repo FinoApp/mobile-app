@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:financial_ccounting/core/errors/failure.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_data_provider.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_usecases_provider.dart';
@@ -169,13 +169,14 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
         if (mounted) {
           showSuccessSnackbar(context, l10n.expenseAdded);
         }
-      } on DioException catch (e) {
+      } on Failure catch (failure) {
         if (mounted) {
-          final message =
-              e.response?.data?['message'] ?? l10n.failedToAddExpense;
+          final message = failure is ValidationFailure
+              ? failure.message
+              : l10n.failedToAddExpense;
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(message.toString())));
+          ).showSnackBar(SnackBar(content: Text(message)));
         }
       }
     }

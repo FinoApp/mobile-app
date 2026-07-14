@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:financial_ccounting/core/errors/failure_mapper.dart';
 import 'package:financial_ccounting/core/models/category_model/category_model.dart';
 import 'package:financial_ccounting/features/main_finance/domain/repositories/category_repository.dart';
 
@@ -8,48 +9,29 @@ class CategoryRepositoryImpl implements CategoryRepository {
   CategoryRepositoryImpl({required this.dio});
 
   @override
-  Future<List<GetCategoryModel>> getCategory() async {
-    try {
-      final response = await dio.get('/categories/');
+  Future<List<GetCategoryModel>> getCategory() => guardRepositoryCall(() async {
+    final response = await dio.get('/categories/');
 
-      return (response.data as List)
-          .map((category) => GetCategoryModel.fromJson(category))
-          .toList();
-    } on Exception catch (_) {
-      rethrow;
-    }
-  }
+    return (response.data as List)
+        .map((category) => GetCategoryModel.fromJson(category))
+        .toList();
+  });
 
   @override
-  Future<void> createCategory(CategoryRequest category) async {
-    try {
-      await dio.post('/categories/', data: category.toJson());
-    } on Exception catch (_) {
-      rethrow;
-    }
-  }
+  Future<void> createCategory(CategoryRequest category) => guardRepositoryCall(
+    () => dio.post('/categories/', data: category.toJson()),
+  );
 
   @override
-  Future<void> deleteCategory(int categoryId) async {
-    try {
-      await dio.delete('/categories/$categoryId/');
-    } on DioException catch (_) {
-      rethrow;
-    }
-  }
+  Future<void> deleteCategory(int categoryId) =>
+      guardRepositoryCall(() => dio.delete('/categories/$categoryId/'));
 
   @override
-  Future<void> editCategory(
-    int categoryId,
-    EditCateogoryModel editCategory,
-  ) async {
-    try {
-      final data = editCategory.toJson()
-        ..removeWhere((key, value) => value == null);
+  Future<void> editCategory(int categoryId, EditCateogoryModel editCategory) =>
+      guardRepositoryCall(() async {
+        final data = editCategory.toJson()
+          ..removeWhere((key, value) => value == null);
 
-      await dio.post('/categories/$categoryId/', data: data);
-    } on DioException catch (_) {
-      rethrow;
-    }
-  }
+        await dio.post('/categories/$categoryId/', data: data);
+      });
 }

@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:dio/dio.dart';
+import 'package:financial_ccounting/core/errors/failure.dart';
 import 'package:financial_ccounting/core/widgets/divider.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_usecases_provider.dart';
@@ -238,7 +238,7 @@ class BottoModalButton extends ConsumerWidget {
                   await ref.read(deleteExpenseUseCaseProvider).call(id);
                   ref.invalidate(expenseListProvider);
                   if (context.mounted) context.pop();
-                } on DioException catch (_) {}
+                } on Failure catch (_) {}
               },
             ),
           ),

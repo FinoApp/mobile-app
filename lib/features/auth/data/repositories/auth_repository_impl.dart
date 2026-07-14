@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:financial_ccounting/core/models/user_model/user.dart';
+import 'package:financial_ccounting/core/errors/failure_mapper.dart';
 import 'package:financial_ccounting/core/services/token_storage.dart';
 import 'package:financial_ccounting/features/auth/domain/repositories/auth_repository.dart';
 
@@ -10,16 +11,12 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.dio, required this.storage});
 
   @override
-  Future<void> register(PostRegisterUser user) async {
-    try {
-      await dio.post('/users/register', data: user.toJson());
-    } catch (e) {
-      rethrow;
-    }
-  }
+  Future<void> register(PostRegisterUser user) => guardRepositoryCall(
+    () => dio.post('/users/register', data: user.toJson()),
+  );
 
   @override
-  Future<int> login(PostLoginUser user) async {
+  Future<int> login(PostLoginUser user) => guardRepositoryCall(() async {
     final response = await dio.post(
       '/auth/login',
       data: user.toJson(),
@@ -34,10 +31,10 @@ class AuthRepositoryImpl implements AuthRepository {
     await storage.safeTokens(access, refresh);
 
     return userId;
-  }
+  });
 
   @override
-  Future<String> refresh() async {
+  Future<String> refresh() => guardRepositoryCall(() async {
     final refreshToken = await storage.getRefreshToken();
     final response = await dio.post(
       '/auth/refresh',
@@ -48,10 +45,8 @@ class AuthRepositoryImpl implements AuthRepository {
     final newRefresh = response.data['refreshToken'];
     await storage.safeTokens(newAccess, newRefresh);
     return newAccess;
-  }
+  });
 
   @override
-  Future<void> logout() async {
-    await storage.clear();
-  }
+  Future<void> logout() => guardRepositoryCall(storage.clear);
 }
