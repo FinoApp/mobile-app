@@ -1,5 +1,7 @@
+import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
 import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
+import 'package:financial_ccounting/features/add_finance/data/repositories/expense_repository.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/amount.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/category.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/note.dart';
@@ -74,7 +76,9 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                   Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary.withAlpha(25),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withAlpha(25),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
@@ -143,9 +147,9 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    DateFormat('dd MMM yyyy').format(
-                      DateTime.parse(widget.expense.date),
-                    ),
+                    DateFormat(
+                      'dd MMM yyyy',
+                    ).format(DateTime.parse(widget.expense.date)),
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: Theme.of(context).colorScheme.onSecondary,
                     ),
@@ -183,10 +187,13 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                         child: Center(
                           child: Text(
                             l10n.cancel,
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: isLight ? Colors.black54 : Colors.white54,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: isLight
+                                      ? Colors.black54
+                                      : Colors.white54,
+                                ),
                           ),
                         ),
                       ),
@@ -198,17 +205,15 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                       onTap: () async {
                         if (globalKey.currentState!.validate()) {
                           try {
-                            await ref
-                                .read(expenseRepositoryProvider)
-                                .editExpense(
-                                  widget.expense.id,
-                                  UpdateExpenseModel(
-                                    amount: double.parse(amountController.text),
-                                    title: titleController.text,
-                                    categoryId: selectIndexCategory,
-                                    note: noteController.text,
-                                  ),
-                                );
+                            await getIt<ExpenseRepository>().editExpense(
+                              widget.expense.id,
+                              UpdateExpenseModel(
+                                amount: double.parse(amountController.text),
+                                title: titleController.text,
+                                categoryId: selectIndexCategory,
+                                note: noteController.text,
+                              ),
+                            );
                             ref.invalidate(expenseListProvider);
                             if (context.mounted) {
                               showSuccessSnackbar(context, l10n.expenseUpdated);
@@ -218,7 +223,9 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(l10n.failedToUpdateExpense)),
+                                SnackBar(
+                                  content: Text(l10n.failedToUpdateExpense),
+                                ),
                               );
                             }
                           }
@@ -233,10 +240,11 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                         child: Center(
                           child: Text(
                             l10n.save,
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
                           ),
                         ),
                       ),

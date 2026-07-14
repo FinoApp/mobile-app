@@ -1,17 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:financial_ccounting/core/providers/is_login_provider.dart';
 import 'package:financial_ccounting/core/services/token_storage.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthInterceptor extends Interceptor {
   final Dio dio;
   final TokenStorage storage;
-  final Ref ref;
+  final Future<void> Function() onUnautorized;
   bool _isRefreshing = false;
   AuthInterceptor({
     required this.dio,
     required this.storage,
-    required this.ref,
+    required this.onUnautorized,
   });
 
   @override
@@ -57,7 +55,7 @@ class AuthInterceptor extends Interceptor {
         return handler.resolve(response);
       } catch (e) {
         await storage.clear();
-        ref.read(isLoginProvider.notifier).state = false;
+        await onUnautorized();
         return handler.next(err);
       } finally {
         _isRefreshing = false;

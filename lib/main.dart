@@ -8,6 +8,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final container = ProviderContainer();
+  await configureDependencies(
+    onUnautorized: () async {
+      container.read(isLoginProvider.notifier).state = false;
+    },
+  );
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]); // запрет на поворот

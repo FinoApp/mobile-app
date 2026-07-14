@@ -1,9 +1,10 @@
+import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/core/providers/is_login_provider.dart';
 import 'package:financial_ccounting/core/providers/user_id_provdier.dart';
 import 'package:financial_ccounting/core/providers/user_provider.dart';
-import 'package:financial_ccounting/features/auth/data/providers/auth_repository_provider.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
+import 'package:financial_ccounting/features/auth/data/repositories/auth_repository.dart';
 import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,9 +44,9 @@ class LogOutModal extends ConsumerWidget {
                 SizedBox(width: 12),
                 Text(
                   l10n.logOut,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -78,10 +79,13 @@ class LogOutModal extends ConsumerWidget {
                       child: Center(
                         child: Text(
                           l10n.cancel,
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: isLight ? Colors.black54 : Colors.white54,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: isLight
+                                    ? Colors.black54
+                                    : Colors.white54,
+                              ),
                         ),
                       ),
                     ),
@@ -91,7 +95,7 @@ class LogOutModal extends ConsumerWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
-                      await ref.read(authRepositoryProvider).logout();
+                      await getIt<AuthRepository>().logout();
                       ref.invalidate(categoryListProvider);
                       ref.invalidate(expenseListProvider);
                       ref.invalidate(userProvider);
@@ -107,10 +111,11 @@ class LogOutModal extends ConsumerWidget {
                       child: Center(
                         child: Text(
                           l10n.logOut,
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
                         ),
                       ),
                     ),

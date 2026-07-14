@@ -1,4 +1,3 @@
-import 'package:financial_ccounting/core/l10n/app_localizations.dart';
 import 'package:financial_ccounting/core/router/routers.dart';
 import 'package:financial_ccounting/core/providers/theme_provider.dart';
 import 'package:financial_ccounting/core/theme/app_theme.dart';

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
 import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
+import 'package:financial_ccounting/features/add_finance/data/repositories/expense_repository.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_data_provider.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/amount.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/button_container.dart';
@@ -48,7 +50,10 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
         child: Scaffold(
           appBar: AppBar(
             surfaceTintColor: Colors.transparent,
-            title: Text(l10n.addPageTitle, style: Theme.of(context).textTheme.bodyMedium),
+            title: Text(
+              l10n.addPageTitle,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             toolbarHeight: 46,
           ),
           body: SizedBox.expand(
@@ -68,21 +73,33 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel(context, l10n.titleLabel, isRequired: true),
+                          _buildLabel(
+                            context,
+                            l10n.titleLabel,
+                            isRequired: true,
+                          ),
                           SizedBox(height: 6),
                           TitleField(
                             titleController: titleController,
                             validator: (value) => fieldsValidator(value, l10n),
                           ),
                           SizedBox(height: 16),
-                          _buildLabel(context, l10n.amountLabel, isRequired: true),
+                          _buildLabel(
+                            context,
+                            l10n.amountLabel,
+                            isRequired: true,
+                          ),
                           SizedBox(height: 6),
                           Amount(
                             controller: amountController,
                             validator: (value) => fieldsValidator(value, l10n),
                           ),
                           SizedBox(height: 16),
-                          _buildLabel(context, l10n.categoryLabel, isRequired: true),
+                          _buildLabel(
+                            context,
+                            l10n.categoryLabel,
+                            isRequired: true,
+                          ),
                           SizedBox(height: 10),
                           Category(radius: 36),
                           if (selectIndexCategory == null) ...[
@@ -137,17 +154,15 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
 
     if (globalKey.currentState!.validate()) {
       try {
-        await ref
-            .read(expenseRepositoryProvider)
-            .postExpense(
-              CreateExpenseModel(
-                amount: double.parse(amountValue),
-                title: titleController.text,
-                categoryId: selectIndexCategory,
-                date: selectDate.toUtc().toIso8601String(),
-                note: noteController.text,
-              ),
-            );
+        await getIt<ExpenseRepository>().postExpense(
+          CreateExpenseModel(
+            amount: double.parse(amountValue),
+            title: titleController.text,
+            categoryId: selectIndexCategory,
+            date: selectDate.toUtc().toIso8601String(),
+            note: noteController.text,
+          ),
+        );
         _resetForm();
         ref.invalidate(expenseListProvider);
         ref.invalidate(categoryListProvider);
