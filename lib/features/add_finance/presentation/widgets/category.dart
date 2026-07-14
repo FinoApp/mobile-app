@@ -1,5 +1,5 @@
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/oval_figure.dart';
-import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
+import 'package:financial_ccounting/features/main_finance/presentation/providers/category_usecase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

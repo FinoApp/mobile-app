@@ -1,6 +1,6 @@
 import 'package:financial_ccounting/core/services/pdf_export_service.dart';
 import 'package:financial_ccounting/core/theme/color.dart';
-import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
+import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_usecases_provider.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
 import 'package:financial_ccounting/features/history/presentation/widgets/extense_history_container.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,7 +48,10 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(l10n.historyPageTitle, style: Theme.of(context).textTheme.bodyMedium),
+        title: Text(
+          l10n.historyPageTitle,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
         toolbarHeight: 46,
         actions: [
           GestureDetector(

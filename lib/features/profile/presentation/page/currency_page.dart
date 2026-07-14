@@ -1,6 +1,4 @@
 import 'package:financial_ccounting/core/constants/currency_enum.dart';
-import 'package:financial_ccounting/core/data/user_repository.dart';
-import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/core/models/user_model/user.dart';
 import 'package:financial_ccounting/core/providers/user_id_provdier.dart';
 import 'package:financial_ccounting/core/providers/user_provider.dart';
@@ -104,10 +102,12 @@ class CurrencyPage extends ConsumerWidget {
                   child: GestureDetector(
                     onTap: () async {
                       try {
-                        await getIt<UserRepository>().editUser(
-                          userId.toString(),
-                          EditUser(currency: currentCurrency.name),
-                        );
+                        await ref
+                            .read(editUserUsecaseProvider)
+                            .call(
+                              userId.toString(),
+                              EditUser(currency: currentCurrency.name),
+                            );
                         ref.invalidate(userProvider);
                         ref.invalidate(currencyProvider);
                         if (context.mounted) {

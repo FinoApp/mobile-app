@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
-import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
-import 'package:financial_ccounting/features/add_finance/data/repositories/expense_repository.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_data_provider.dart';
+import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_usecases_provider.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/amount.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/button_container.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/category.dart';
@@ -13,7 +11,7 @@ import 'package:financial_ccounting/features/add_finance/presentation/widgets/sn
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/title.dart';
 import 'package:financial_ccounting/features/add_finance/utils/fields_validator.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
-import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
+import 'package:financial_ccounting/features/main_finance/presentation/providers/category_usecase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -154,15 +152,17 @@ class _AddFinancePageState extends ConsumerState<AddFinancePage> {
 
     if (globalKey.currentState!.validate()) {
       try {
-        await getIt<ExpenseRepository>().postExpense(
-          CreateExpenseModel(
-            amount: double.parse(amountValue),
-            title: titleController.text,
-            categoryId: selectIndexCategory,
-            date: selectDate.toUtc().toIso8601String(),
-            note: noteController.text,
-          ),
-        );
+        await ref
+            .read(createExpenseUseCaseProvider)
+            .call(
+              CreateExpenseModel(
+                amount: double.parse(amountValue),
+                title: titleController.text,
+                categoryId: selectIndexCategory,
+                date: selectDate.toUtc().toIso8601String(),
+                note: noteController.text,
+              ),
+            );
         _resetForm();
         ref.invalidate(expenseListProvider);
         ref.invalidate(categoryListProvider);

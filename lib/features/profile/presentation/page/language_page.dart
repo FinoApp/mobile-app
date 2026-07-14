@@ -1,5 +1,3 @@
-import 'package:financial_ccounting/core/data/user_repository.dart';
-import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/core/widgets/divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -100,10 +98,12 @@ class LanguagePage extends ConsumerWidget {
                   child: GestureDetector(
                     onTap: () async {
                       try {
-                        await getIt<UserRepository>().editUser(
-                          userId.toString(),
-                          EditUser(language: currentLanguage.name),
-                        );
+                        await ref
+                            .read(editUserUsecaseProvider)
+                            .call(
+                              userId.toString(),
+                              EditUser(language: currentLanguage.name),
+                            );
                         ref.invalidate(userProvider);
                         if (context.mounted) {
                           showSuccessSnackbar(

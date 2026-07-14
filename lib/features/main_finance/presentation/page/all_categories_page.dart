@@ -1,8 +1,6 @@
-import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/core/models/category_model/category_model.dart';
 import 'package:financial_ccounting/features/add_finance/utils/fields_validator.dart';
-import 'package:financial_ccounting/features/main_finance/data/providers/category_repository_provider.dart';
-import 'package:financial_ccounting/features/main_finance/data/repositories/category_repository.dart';
+import 'package:financial_ccounting/features/main_finance/presentation/providers/category_usecase_provider.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/providers/select_color_provider.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/widgets/all_categories/category_card.dart';
 import 'package:financial_ccounting/features/main_finance/presentation/widgets/all_categories/edit_category_modal.dart';
@@ -113,8 +111,9 @@ class AllCategoriesPage extends ConsumerWidget {
                               ),
                               CustomSlidableAction(
                                 onPressed: (context) async {
-                                  await getIt<CategoryRepository>()
-                                      .deleteCategory(category.id);
+                                  await ref
+                                      .read(deleteCategoryUsecaseProvider)
+                                      .call(category.id);
                                   ref.invalidate(categoryListProvider);
                                 },
                                 backgroundColor: Colors.transparent,
@@ -369,8 +368,9 @@ class _ModalForAddCategoryState extends ConsumerState<ModalForAddCategory> {
                             onTap: () async {
                               if (globalKey.currentState!.validate()) {
                                 try {
-                                  await getIt<CategoryRepository>()
-                                      .createCategory(
+                                  await ref
+                                      .read(addCategoryUsecaseProvider)
+                                      .call(
                                         CategoryRequest(
                                           title: titleController.text,
                                           color: selectColor,

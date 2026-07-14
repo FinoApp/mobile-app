@@ -1,5 +1,5 @@
 import 'package:financial_ccounting/core/theme/color.dart';
-import 'package:financial_ccounting/features/main_finance/data/providers/category_quantity_provider.dart';
+import 'package:financial_ccounting/features/main_finance/presentation/providers/category_quantity_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

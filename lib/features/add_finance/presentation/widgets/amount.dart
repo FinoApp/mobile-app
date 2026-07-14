@@ -1,6 +1,5 @@
 import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_data_provider.dart';
 import 'package:financial_ccounting/features/auth/data/providers/lang_currency_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

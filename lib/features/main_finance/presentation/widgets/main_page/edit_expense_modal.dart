@@ -1,7 +1,5 @@
-import 'package:financial_ccounting/core/di/injection_container.dart';
 import 'package:financial_ccounting/features/add_finance/data/models/expense_model/expense_model.dart';
-import 'package:financial_ccounting/features/add_finance/data/providers/expense_repository_provider.dart';
-import 'package:financial_ccounting/features/add_finance/data/repositories/expense_repository.dart';
+import 'package:financial_ccounting/features/add_finance/presentation/providers/expense_usecases_provider.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/amount.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/category.dart';
 import 'package:financial_ccounting/features/add_finance/presentation/widgets/note.dart';
@@ -205,15 +203,17 @@ class _EditExpenseModalState extends ConsumerState<EditExpenseModal> {
                       onTap: () async {
                         if (globalKey.currentState!.validate()) {
                           try {
-                            await getIt<ExpenseRepository>().editExpense(
-                              widget.expense.id,
-                              UpdateExpenseModel(
-                                amount: double.parse(amountController.text),
-                                title: titleController.text,
-                                categoryId: selectIndexCategory,
-                                note: noteController.text,
-                              ),
-                            );
+                            await ref
+                                .read(editExpenseUseCaseProvider)
+                                .call(
+                                  widget.expense.id,
+                                  UpdateExpenseModel(
+                                    amount: double.parse(amountController.text),
+                                    title: titleController.text,
+                                    categoryId: selectIndexCategory,
+                                    note: noteController.text,
+                                  ),
+                                );
                             ref.invalidate(expenseListProvider);
                             if (context.mounted) {
                               showSuccessSnackbar(context, l10n.expenseUpdated);

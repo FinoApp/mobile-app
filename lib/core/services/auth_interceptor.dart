@@ -4,12 +4,12 @@ import 'package:financial_ccounting/core/services/token_storage.dart';
 class AuthInterceptor extends Interceptor {
   final Dio dio;
   final TokenStorage storage;
-  final Future<void> Function() onUnautorized;
+  final Future<void> Function() onUnauthorized;
   bool _isRefreshing = false;
   AuthInterceptor({
     required this.dio,
     required this.storage,
-    required this.onUnautorized,
+    required this.onUnauthorized,
   });
 
   @override
@@ -55,7 +55,7 @@ class AuthInterceptor extends Interceptor {
         return handler.resolve(response);
       } catch (e) {
         await storage.clear();
-        await onUnautorized();
+        await onUnauthorized();
         return handler.next(err);
       } finally {
         _isRefreshing = false;
