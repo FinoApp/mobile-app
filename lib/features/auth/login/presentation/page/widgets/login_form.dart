@@ -26,6 +26,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   bool _isLoading = false;
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
     final l10n = ref.watch(localizationProvider);
@@ -86,16 +93,18 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                       password: passwordController.text,
                     ),
                   );
+
+                  if (!mounted) return;
                   setState(() {
                     _isLoading = false;
                   });
                   ref.read(userIdProvider.notifier).state = userId;
                   ref.read(isLoginProvider.notifier).state = true;
                 } on Failure catch (failure) {
+                  if (!mounted || !context.mounted) return;
                   setState(() {
                     _isLoading = false;
                   });
-                  if (!context.mounted) return;
 
                   final message = switch (failure) {
                     UnauthorizedFailure() ||
